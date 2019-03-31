@@ -24,6 +24,6 @@ sock_t create_socket(int port)
     if (sock.fd < 0)
         exit_with("error when creating socket");
     if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) < 0)
-        exit_with("error on binding fd : '%d'", sock.fd);
+        exit_with("error on binding socket with port : '%d'", port);
     return sock;
 }

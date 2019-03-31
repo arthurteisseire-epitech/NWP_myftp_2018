@@ -12,6 +12,17 @@
 #include "myftp.h"
 #include "socket.h"
 
+long int get_port(const char *port_str)
+{
+    long port;
+    char *endptr = port_str;
+
+    port = strtol(port_str, &endptr, 10);
+    if (port_str == endptr || port < 1 || port > 65535)
+        exit_with("error: '%s' isn't a number between 1 and 65535", port_str);
+    return port;
+}
+
 int main(int ac, char *av[])
 {
     sock_t sock;
@@ -19,7 +30,7 @@ int main(int ac, char *av[])
 
     if (ac != 2)
         return (84);
-    sock = create_socket(atoi(av[1]));
+    sock = create_socket(get_port(av[1]));
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 1);
     connfd = accept(sock.fd, NULL, NULL);
