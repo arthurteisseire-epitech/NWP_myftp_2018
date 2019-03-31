@@ -16,6 +16,7 @@ sock_t create_socket(int port)
 {
     sock_t sock;
 
+    sock.port = port;
     sock.size_info = sizeof(sock.info);
     sock.info.sin_family = AF_INET;
     sock.info.sin_port = htons(port);
@@ -23,7 +24,11 @@ sock_t create_socket(int port)
     sock.fd = socket(AF_INET, SOCK_STREAM, 0);
     if (sock.fd < 0)
         exit_with("error when creating socket");
-    if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) < 0)
-        exit_with("error on binding socket with port : '%d'", port);
     return sock;
+}
+
+void bind_socket(sock_t *sock)
+{
+    if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) < 0)
+        exit_with("error on binding socket with port : '%d'", sock->port);
 }

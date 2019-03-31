@@ -42,6 +42,7 @@ int main(int ac, char *av[])
     if (ac != 2)
         return (84);
     sock = create_socket(get_port(av[1]));
+    bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     connfd = wait_connection(sock.fd);
     write(connfd, "Hello World!\n", sizeof("Hello World!\n"));
