@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include "myftp.h"
 #include "socket.h"
 
 int main(int ac, char *av[])
@@ -22,6 +23,8 @@ int main(int ac, char *av[])
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 1);
     connfd = accept(sock.fd, NULL, NULL);
+    if (connfd < 0)
+        exit_with("error when accepting");
     write(connfd, "Hello World!\n", sizeof("Hello World!\n"));
     return (0);
 }

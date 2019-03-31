@@ -11,9 +11,10 @@ DTESTS		=	tests/
 DSRC		=	src/
 DSRC_UT		=	tests/src/
 
-MAIN		=	$(DSRC)main.c			\
+MAIN		=	$(DSRC)main.c		\
 
-SRC			=	$(DSRC)socket.c			\
+SRC		=	$(DSRC)socket.c		\
+			$(DSRC)error.c		\
 
 SRC_UT		=	$(DSRC_UT)tests_socket.c		\
 
