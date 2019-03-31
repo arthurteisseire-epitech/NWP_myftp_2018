@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 include_directories(include)
 
-file(GLOB_RECURSE sources src/*.c)
+file(GLOB_RECURSE sources src/*.c include/*.h)
 add_executable(myftp ${sources})
 
 #file(GLOB_RECURSE tests_sources tests/src/*.c)
