@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include <sys/wait.h>
 #include "myftp.h"
 #include "socket.h"
 
@@ -28,20 +29,31 @@ int wait_connection(int fd)
     int connfd;
     struct sockaddr_in client;
     socklen_t len = sizeof(client);
+    int child_pid = fork();
+    char buffer[1024];
+    int rd_bytes;
 
     connfd = accept(fd, (struct sockaddr *) &client, &len);
     if (connfd < 0)
         exit_with("error when accepting");
-    dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr), htons(client.sin_port));
-    return connfd;
+    if (child_pid == 0) {
+        dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr), htons(client.sin_port));
+        rd_bytes = read(connfd, buffer, 1024);
+        write(connfd, buffer, rd_bytes);
+        sleep(10);
+        close(connfd);
+        exit(connfd);
+    } else if (child_pid > 0) {
+        close(connfd);
+    } else {
+        exit_with("error when forking");
+    }
+    return 0;
 }
 
 int main(int ac, char *av[])
 {
     sock_t sock;
-    int connfd;
-    char buffer[1024];
-    int rd_bytes;
 
     if (ac != 2)
         return (84);
@@ -49,11 +61,7 @@ int main(int ac, char *av[])
     bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 5);
-    while (1) {
-        connfd = wait_connection(sock.fd);
-        rd_bytes = read(connfd, buffer, 1024);
-        write(connfd, buffer, rd_bytes);
-        close(connfd);
-    }
+    while (1)
+        wait_connection(sock.fd);
     return (0);
 }
