@@ -19,5 +19,6 @@ int main()
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+    listen(sockfd, 1);
     return (0);
 }
