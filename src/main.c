@@ -23,6 +23,17 @@ long int get_port(const char *port_str)
     return port;
 }
 
+int wait_connection(int fd)
+{
+    int connfd;
+
+    listen(fd, 1);
+    connfd = accept(fd, NULL, NULL);
+    if (connfd < 0)
+        exit_with("error when accepting");
+    return connfd;
+}
+
 int main(int ac, char *av[])
 {
     sock_t sock;
@@ -32,10 +43,7 @@ int main(int ac, char *av[])
         return (84);
     sock = create_socket(get_port(av[1]));
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    listen(sock.fd, 1);
-    connfd = accept(sock.fd, NULL, NULL);
-    if (connfd < 0)
-        exit_with("error when accepting");
+    connfd = wait_connection(sock.fd);
     write(connfd, "Hello World!\n", sizeof("Hello World!\n"));
     return (0);
 }
