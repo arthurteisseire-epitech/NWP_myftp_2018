@@ -5,7 +5,10 @@
 ** main.c
 */
 
+#include <sys/types.h>
+#include <sys/socket.h>
+
 int main()
 {
-    return (0);
+    return socket(AF_INET, SOCK_STREAM, 0);
 }
