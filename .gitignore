@@ -11,9 +11,9 @@ coverage
 
 # Clion
 .idea/
-CMakeLists.txt
 cmake-build-debug/
 CMakeFiles/
 
 # Project
 test_ftp.sh
+myftp

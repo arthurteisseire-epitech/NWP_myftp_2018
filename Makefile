@@ -1,28 +1,30 @@
 ##
 ## EPITECH PROJECT, 2018
-## ftp
+## PSU_myftp_2018
 ## File description:
 ## Makefile
 ##
 
-CC		=	gcc
-INC		=	include/
+CC			=	gcc
+INC			=	include/
 DTESTS		=	tests/
 DSRC		=	src/
 DSRC_UT		=	tests/src/
 
-SRC		=	$(DSRC)file.c			\
+MAIN		=	$(DSRC)main.c			\
 
-SRC_UT		=	$(DSRC_UT)tests_file.c		\
+SRC			=	$(DSRC)socket.c			\
+
+SRC_UT		=	$(DSRC_UT)tests_socket.c		\
 
 CFLAGS		+=	-Wall -Wextra -I$(INC)
-LDFLAGS		=	-lgtest -lgtest_main
-OBJ		=	$(SRC:.c=.o)
+TESTFLAGS	=	-lgtest -lgtest_main
+OBJ			=	$(SRC:.c=.o) $(MAIN:.c=.o)
 NAME		=	myftp
 NAME_UT		=	units
 
 all: $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
 
 clean:
 	rm -f $(OBJ)
@@ -39,7 +41,7 @@ debug: re
 tests_run: CFLAGS += --coverage
 tests_run: LDFLAGS += -lgcov
 tests_run:
-	$(CC) -o $(NAME_UT) $(SRC) $(SRC_UT) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(NAME_UT) $(SRC) $(SRC_UT) $(CFLAGS) $(TESTFLAGS)
 	./$(NAME_UT)
 	gcov *.gcno &> /dev/null
 
