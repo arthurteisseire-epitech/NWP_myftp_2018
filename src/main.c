@@ -37,7 +37,7 @@ int wait_connection(int fd)
     return (connfd);
 }
 
-int main(int ac, char *av[])
+void start_ftp(int port)
 {
     set_t *set = set_init();
     sock_t sock;
@@ -46,22 +46,18 @@ int main(int ac, char *av[])
     int rd_bytes;
     char buffer[1024];
 
-    if (ac != 2)
-        return (84);
-    sock = create_socket(get_port(av[1]));
+    sock = create_socket(port);
     bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 5);
 
-    FD_ZERO(&fd_s);
     set_add_fd(set, (fd_t){sock.fd, SERVER});
     for (int i = 0; i < 3; ++i) {
         set_reload_fd_set(set, &fd_s);
         select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
-        printf("end select\n");
-        if (FD_ISSET(sock.fd, &fd_s)) {
-            connfd = wait_connection(sock.fd);
-            set_add_fd(set, (fd_t){connfd, CLIENT});
+        if (FD_ISSET((sock).fd, &fd_s)) {
+            connfd = wait_connection((sock).fd);
+            set_add_fd(set, (fd_t) {connfd, CLIENT});
         } else if (FD_ISSET(connfd, &fd_s)) {
             printf("%d\n", FD_ISSET(connfd, &fd_s));
             rd_bytes = read(connfd, buffer, 1024);
@@ -70,5 +66,12 @@ int main(int ac, char *av[])
     }
     FD_CLR(sock.fd, &fd_s);
     close(sock.fd);
+}
+
+int main(int ac, char *av[])
+{
+    if (ac != 2)
+        return (84);
+    start_ftp(get_port(av[1]));
     return (0);
 }
