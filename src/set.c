@@ -33,3 +33,13 @@ void set_reload_fd_set(set_t *set, fd_set *fd_s)
         if (set->readfds[i].type != FREE)
             FD_SET(set->readfds[i].fd, fd_s);
 }
+
+int set_find_max_fd(set_t *set)
+{
+    int max = 0;
+
+    for (size_t i = 0; i < set->size; ++i)
+        if (set->readfds[i].fd > max)
+            max = set->readfds[i].fd;
+    return (max);
+}

@@ -57,7 +57,7 @@ int main(int ac, char *av[])
     set_add_fd(set, (fd_t){sock.fd, SERVER});
     for (int i = 0; i < 3; ++i) {
         set_reload_fd_set(set, &fd_s);
-        select(65536, &fd_s, NULL, NULL, NULL);
+        select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
         printf("end select\n");
         if (FD_ISSET(sock.fd, &fd_s)) {
             connfd = wait_connection(sock.fd);
