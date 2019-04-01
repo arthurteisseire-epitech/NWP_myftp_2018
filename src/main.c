@@ -29,31 +29,21 @@ int wait_connection(int fd)
     int connfd;
     struct sockaddr_in client;
     socklen_t len = sizeof(client);
-    int child_pid = fork();
-    char buffer[1024];
-    int rd_bytes;
 
     connfd = accept(fd, (struct sockaddr *) &client, &len);
     if (connfd < 0)
         exit_with("error when accepting");
-    if (child_pid == 0) {
-        dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr), htons(client.sin_port));
-        rd_bytes = read(connfd, buffer, 1024);
-        write(connfd, buffer, rd_bytes);
-        sleep(10);
-        close(connfd);
-        exit(connfd);
-    } else if (child_pid > 0) {
-        close(connfd);
-    } else {
-        exit_with("error when forking");
-    }
-    return 0;
+    dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr), htons(client.sin_port));
+    return (connfd);
 }
 
 int main(int ac, char *av[])
 {
     sock_t sock;
+    fd_set set;
+    int connfd = 987;
+    int rd_bytes;
+    char buffer[1024];
 
     if (ac != 2)
         return (84);
@@ -61,7 +51,23 @@ int main(int ac, char *av[])
     bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 5);
-    while (1)
-        wait_connection(sock.fd);
+
+    FD_ZERO(&set);
+    for (int i = 0; i < 3; ++i) {
+        FD_SET(sock.fd, &set);
+        select(65536, &set, NULL, NULL, NULL);
+        printf("end select\n");
+        if (FD_ISSET(sock.fd, &set)) {
+            connfd = wait_connection(sock.fd);
+            FD_ZERO(&set);
+            FD_SET(connfd, &set);
+        } else if (FD_ISSET(connfd, &set)) {
+            printf("%d\n", FD_ISSET(connfd, &set));
+            rd_bytes = read(connfd, buffer, 1024);
+            write(connfd, buffer, rd_bytes);
+        }
+    }
+    FD_CLR(sock.fd, &set);
+    close(sock.fd);
     return (0);
 }
