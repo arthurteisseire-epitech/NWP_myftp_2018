@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
 project(PSU_myftp_2018 C)
 
-set(CMAKE_C_STANDARD 99)
+add_compile_options(-Wall -Wextra)
 
 include_directories(include)
 
-file(GLOB_RECURSE sources src/*.c include/*.h)
-add_executable(myftp ${sources})
-
-#file(GLOB_RECURSE tests_sources tests/src/*.c)
+file(GLOB_RECURSE sources src/*.c)
+file(GLOB_RECURSE tests_sources tests/*.c)
+add_executable(myftp ${sources} ${tests_sources})
+target_link_libraries(myftp criterion)

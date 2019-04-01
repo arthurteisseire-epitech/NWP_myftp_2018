@@ -9,17 +9,16 @@ CC			=	gcc
 INC			=	include/
 DTESTS		=	tests/
 DSRC		=	src/
-DSRC_UT		=	tests/src/
+DSRC_UT		=	tests/
 
 MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c		\
 			$(DSRC)error.c		\
 
-SRC_UT		=	$(DSRC_UT)tests_socket.c		\
+SRC_UT		=	$(DSRC_UT)set_test.c		\
 
 CFLAGS		+=	-Wall -Wextra -I$(INC)
-TESTFLAGS	=	-lgtest -lgtest_main
 OBJ			=	$(SRC:.c=.o) $(MAIN:.c=.o)
 NAME		=	myftp
 NAME_UT		=	units
@@ -40,9 +39,9 @@ debug: CFLAGS += -g
 debug: re
 
 tests_run: CFLAGS += --coverage
-tests_run: LDFLAGS += -lgcov
+tests_run: LDFLAGS += -lgcov -lcriterion
 tests_run:
-	$(CC) -o $(NAME_UT) $(SRC) $(SRC_UT) $(CFLAGS) $(TESTFLAGS)
+	$(CC) -o $(NAME_UT) $(SRC) $(SRC_UT) $(CFLAGS) $(LDFLAGS)
 	./$(NAME_UT)
 	gcov *.gcno &> /dev/null
 
