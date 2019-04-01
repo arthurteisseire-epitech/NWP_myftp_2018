@@ -25,3 +25,11 @@ void set_add_fd(set_t *set, fd_t fd)
     set->readfds[set->size] = fd;
     ++set->size;
 }
+
+void set_reload_fd_set(set_t *set, fd_set *fd_s)
+{
+    FD_ZERO(fd_s);
+    for (size_t i = 0; i < set->size; ++i)
+        if (set->readfds[i].type != FREE)
+            FD_SET(set->readfds[i].fd, fd_s);
+}

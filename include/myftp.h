@@ -28,6 +28,7 @@ typedef struct set_s {
 
 set_t *set_init(void);
 void set_add_fd(set_t *set, fd_t fd);
+void set_reload_fd_set(set_t *set, fd_set *fd_s);
 void exit_with(const char *msg, ...);
 
 #endif

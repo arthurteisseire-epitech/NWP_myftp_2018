@@ -39,8 +39,9 @@ int wait_connection(int fd)
 
 int main(int ac, char *av[])
 {
+    set_t *set = set_init();
     sock_t sock;
-    fd_set set;
+    fd_set fd_s;
     int connfd = 987;
     int rd_bytes;
     char buffer[1024];
@@ -52,22 +53,22 @@ int main(int ac, char *av[])
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 5);
 
-    FD_ZERO(&set);
+    FD_ZERO(&fd_s);
+    set_add_fd(set, (fd_t){sock.fd, SERVER});
     for (int i = 0; i < 3; ++i) {
-        FD_SET(sock.fd, &set);
-        select(65536, &set, NULL, NULL, NULL);
+        set_reload_fd_set(set, &fd_s);
+        select(65536, &fd_s, NULL, NULL, NULL);
         printf("end select\n");
-        if (FD_ISSET(sock.fd, &set)) {
+        if (FD_ISSET(sock.fd, &fd_s)) {
             connfd = wait_connection(sock.fd);
-            FD_ZERO(&set);
-            FD_SET(connfd, &set);
-        } else if (FD_ISSET(connfd, &set)) {
-            printf("%d\n", FD_ISSET(connfd, &set));
+            set_add_fd(set, (fd_t){connfd, CLIENT});
+        } else if (FD_ISSET(connfd, &fd_s)) {
+            printf("%d\n", FD_ISSET(connfd, &fd_s));
             rd_bytes = read(connfd, buffer, 1024);
             write(connfd, buffer, rd_bytes);
         }
     }
-    FD_CLR(sock.fd, &set);
+    FD_CLR(sock.fd, &fd_s);
     close(sock.fd);
     return (0);
 }

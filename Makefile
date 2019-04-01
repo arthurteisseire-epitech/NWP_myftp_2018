@@ -15,6 +15,7 @@ MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c		\
 			$(DSRC)error.c		\
+			$(DSRC)set.c		\
 
 SRC_UT		=	$(DSRC_UT)set_test.c		\
 
