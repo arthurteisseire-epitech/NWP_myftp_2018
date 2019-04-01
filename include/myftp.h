@@ -23,9 +23,11 @@ typedef struct fd_s {
 
 typedef struct set_s {
     fd_t *readfds;
+    size_t size;
 } set_t;
 
 set_t *set_init(void);
+void set_add_fd(set_t *set, fd_t fd);
 void exit_with(const char *msg, ...);
 
 #endif
