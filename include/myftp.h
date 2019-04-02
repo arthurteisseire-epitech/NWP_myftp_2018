@@ -33,6 +33,7 @@ void set_add_fd(set_t *set, fd_t fd);
 void set_reload_fd_set(set_t *set, fd_set *fd_s);
 int set_find_max_fd(set_t *set);
 void set_set_events(set_t *set, fd_set *fd_s);
+fd_t *set_poll_event(set_t *set);
 void exit_with(const char *msg, ...);
 
 #endif
