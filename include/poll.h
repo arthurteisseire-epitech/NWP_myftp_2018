@@ -29,7 +29,7 @@ typedef struct poll_s {
 } poll_t;
 
 poll_t *poll_init(void);
-void poll_add_fd(poll_t *poll, event_t fd);
+void poll_add_event(poll_t *poll, event_t fd);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
 void poll_set_events(poll_t *poll, fd_set *set);

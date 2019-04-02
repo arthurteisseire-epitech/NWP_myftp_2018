@@ -18,7 +18,7 @@ poll_t *poll_init(void)
     return poll;
 }
 
-void poll_add_fd(poll_t *poll, event_t fd)
+void poll_add_event(poll_t *poll, event_t fd)
 {
     poll->readfds = realloc(poll->readfds, sizeof(fd) * (poll->size + 1));
     if (poll->readfds == NULL)

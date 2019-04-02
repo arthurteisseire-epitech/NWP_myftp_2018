@@ -37,7 +37,7 @@ void handle_event(poll_t *poll, int sockfd, const event_t *event)
 
     if (event->type == SERVER) {
         connfd = wait_connection(sockfd);
-        poll_add_fd(poll, (event_t) {connfd, CLIENT, false});
+        poll_add_event(poll, (event_t) {connfd, CLIENT, false});
     } else if (event->type == CLIENT) {
         rd_bytes = read(event->fd, buffer, 1024);
         write(event->fd, buffer, rd_bytes);
@@ -62,7 +62,7 @@ void start_ftp(int port)
     sock_t sock = create_socket(port);
 
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    poll_add_fd(poll, (event_t) {sock.fd, SERVER, false});
+    poll_add_event(poll, (event_t) {sock.fd, SERVER, false});
     for (int i = 0; i < 3; ++i)
         handle_events(poll, &sock);
     close(sock.fd);
