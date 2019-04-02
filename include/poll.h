@@ -10,6 +10,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include "socket.h"
 
 enum fd_type {
     SERVER,
@@ -18,7 +19,7 @@ enum fd_type {
 };
 
 typedef struct event_s {
-    int fd;
+    sock_t sock;
     enum fd_type type;
     bool is_event;
 } event_t;
@@ -33,6 +34,8 @@ void poll_add_event(poll_t *poll, event_t fd);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
 void poll_set_events(poll_t *poll, fd_set *set);
-event_t *poll_event(poll_t *poll);
+const event_t *poll_event(poll_t *poll);
+
+event_t create_event(sock_t *sock, enum fd_type type);
 
 #endif

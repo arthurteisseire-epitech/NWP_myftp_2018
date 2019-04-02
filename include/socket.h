@@ -12,11 +12,12 @@
 
 typedef struct sock_s {
     struct sockaddr_in info;
-    size_t size_info;
+    socklen_t size_info;
     int fd;
     int port;
 } sock_t;
 
+sock_t init_socket(int fd, int port);
 sock_t create_socket(int port);
 void bind_socket(sock_t *sock);
 

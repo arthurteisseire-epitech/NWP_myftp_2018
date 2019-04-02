@@ -15,39 +15,38 @@
 #include "poll.h"
 #include "socket.h"
 
-int wait_connection(int fd)
+sock_t create_connection(int fd)
 {
-    int connfd;
-    struct sockaddr_in client;
-    socklen_t len = sizeof(client);
+    sock_t sock;
 
-    connfd = accept(fd, (struct sockaddr *) &client, &len);
-    if (connfd < 0)
+    sock.size_info = sizeof(struct sockaddr_in);
+    sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
+    if (sock.fd < 0)
         exit_with("error when accepting");
-    dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr),
-            htons(client.sin_port));
-    return (connfd);
+    dprintf(sock.fd, "ip : %s, port: %d\n", inet_ntoa(sock.info.sin_addr),
+            htons(sock.info.sin_port));
+    return (sock);
 }
 
 void handle_event(poll_t *poll, int sockfd, const event_t *event)
 {
     int rd_bytes;
     char buffer[1024];
-    int connfd;
+    sock_t sock;
 
     if (event->type == SERVER) {
-        connfd = wait_connection(sockfd);
-        poll_add_event(poll, (event_t) {connfd, CLIENT, false});
+        sock = create_connection(sockfd);
+        poll_add_event(poll, create_event(&sock, CLIENT));
     } else if (event->type == CLIENT) {
-        rd_bytes = read(event->fd, buffer, 1024);
-        write(event->fd, buffer, rd_bytes);
+        rd_bytes = read(event->sock.fd, buffer, 1024);
+        write(event->sock.fd, buffer, rd_bytes);
     }
 }
 
 void handle_events(poll_t *poll, sock_t *sock)
 {
     fd_set set;
-    event_t *event;
+    const event_t *event;
 
     poll_reload_set(poll, &set);
     select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);
@@ -62,7 +61,7 @@ void start_ftp(int port)
     sock_t sock = create_socket(port);
 
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    poll_add_event(poll, (event_t) {sock.fd, SERVER, false});
+    poll_add_event(poll, create_event(&sock, SERVER));
     for (int i = 0; i < 3; ++i)
         handle_events(poll, &sock);
     close(sock.fd);

@@ -12,18 +12,27 @@
 #include "myftp.h"
 #include "socket.h"
 
-sock_t create_socket(int port)
+sock_t init_socket(int fd, int port)
 {
     sock_t sock;
 
+    sock.fd = fd;
     sock.port = port;
     sock.size_info = sizeof(sock.info);
     sock.info.sin_family = AF_INET;
     sock.info.sin_port = htons(port);
     sock.info.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-    sock.fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock.fd < 0)
+    return (sock);
+}
+
+sock_t create_socket(int port)
+{
+    sock_t sock;
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (fd < 0)
         exit_with("error when creating socket");
+    sock = init_socket(fd, port);
     bind_socket(&sock);
     listen(sock.fd, 5);
     return sock;

@@ -12,11 +12,11 @@
 void poll_set_events(poll_t *poll, fd_set *set)
 {
     for (size_t i = 0; i < poll->size; ++i)
-        if (FD_ISSET(poll->readfds[i].fd, set))
+        if (FD_ISSET(poll->readfds[i].sock.fd, set))
             poll->readfds[i].is_event = true;
 }
 
-event_t *poll_event(poll_t *poll)
+const event_t *poll_event(poll_t *poll)
 {
     for (size_t i = 0; i < poll->size; ++i)
         if (poll->readfds[i].is_event) {
