@@ -32,38 +32,40 @@
 //    return (sock);
 //}
 
-void handle_client_event(poll_t *poll, event_t *event)
+void handle_client_connection(poll_t *poll, connection_t *conn)
 {
     char buffer[1024] = {0};
-    int rd_bytes = read(event->sock.fd, buffer, sizeof(buffer));
+    int rd_bytes = read(conn->sock.fd, buffer, sizeof(buffer));
 
-    printf("%lu\n", poll->size);
     if (strncasecmp(buffer, "QUIT", 4) == 0)
-        poll_remove_event(poll, event);
-}
-
-void handle_event(poll_t *poll, event_t *event, int sockfd)
-{
-    sock_t sock;
-
-    if (event->type == SERVER) {
-        sock = accept_connection(sockfd);
-        poll_add_event(poll, create_event(&sock, CLIENT));
-    } else if (event->type == CLIENT) {
-        handle_client_event(poll, event);
+        poll_remove_conn(poll, conn);
+    else if (strncasecmp(buffer, "USER", 4) == 0) {
+        dprintf(conn->sock.fd, "hello user");
     }
 }
 
-void handle_events(poll_t *poll, sock_t *sock)
+void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
+{
+    sock_t sock;
+
+    if (conn->type == SERVER) {
+        sock = accept_connection(sockfd);
+        poll_add_conn(poll, create_connection(&sock, CLIENT));
+    } else if (conn->type == CLIENT) {
+        handle_client_connection(poll, conn);
+    }
+}
+
+void handle_connections(poll_t *poll, sock_t *sock)
 {
     fd_set set;
-    event_t *event;
+    connection_t *conn;
 
     poll_reload_set(poll, &set);
     select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);
-    poll_set_events(poll, &set);
-    while ((event = poll_event(poll)) != NULL)
-        handle_event(poll, event, sock->fd);
+    poll_set_conns(poll, &set);
+    while ((conn = poll_connection(poll)) != NULL)
+        handle_connection(poll, conn, sock->fd);
 }
 
 void start_ftp(int port)
@@ -73,8 +75,8 @@ void start_ftp(int port)
 
     bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    poll_add_event(poll, create_event(&sock, SERVER));
+    poll_add_conn(poll, create_connection(&sock, SERVER));
     while (1)
-        handle_events(poll, &sock);
+        handle_connections(poll, &sock);
     close(sock.fd);
 }

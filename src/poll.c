@@ -22,8 +22,8 @@ void poll_reload_set(poll_t *poll, fd_set *set)
 {
     FD_ZERO(set);
     for (size_t i = 0; i < poll->size; ++i)
-        if (poll->readfds[i].type != FREE)
-            FD_SET(poll->readfds[i].sock.fd, set);
+        if (poll->conn[i].type != FREE)
+            FD_SET(poll->conn[i].sock.fd, set);
 }
 
 int poll_find_max_fd(poll_t *poll)
@@ -31,7 +31,7 @@ int poll_find_max_fd(poll_t *poll)
     int max = 0;
 
     for (size_t i = 0; i < poll->size; ++i)
-        if (poll->readfds[i].sock.fd > max)
-            max = poll->readfds[i].sock.fd;
+        if (poll->conn[i].sock.fd > max)
+            max = poll->conn[i].sock.fd;
     return (max);
 }

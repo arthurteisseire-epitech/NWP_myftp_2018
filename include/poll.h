@@ -18,26 +18,26 @@ enum fd_type {
     FREE
 };
 
-typedef struct event_s {
+typedef struct connection_s {
     sock_t sock;
     enum fd_type type;
     bool is_event;
-    struct event_s *next;
-} event_t;
+    struct connection_s *next;
+} connection_t;
 
 typedef struct poll_s {
-    event_t *readfds;
+    connection_t *conn;
     size_t size;
 } poll_t;
 
 poll_t *poll_init(void);
-void poll_add_event(poll_t *poll, event_t *event);
+void poll_add_conn(poll_t *poll, connection_t *conn);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
-void poll_set_events(poll_t *poll, fd_set *set);
-void poll_remove_event(poll_t *poll, event_t *event);
-event_t * poll_event(poll_t *poll);
+void poll_set_conns(poll_t *poll, fd_set *set);
+void poll_remove_conn(poll_t *poll, connection_t *conn);
+connection_t *poll_connection(poll_t *poll);
 
-event_t *create_event(sock_t *sock, enum fd_type type);
+connection_t *create_connection(sock_t *sock, enum fd_type type);
 
 #endif

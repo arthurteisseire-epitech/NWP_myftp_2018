@@ -14,13 +14,13 @@ DSRC_UT		=	tests/
 
 MAIN		=	$(DSRC)main.c		\
 
-SRC		=	$(DSRC)socket.c		\
-			$(DSRC)ftp.c		\
-			$(DSRC)poll.c		\
-			$(DSRC)poll_event.c	\
-			$(DSRC)event.c		\
-			$(DUTILS)safe_alloc.c	\
-			$(DUTILS)exit_with.c	\
+SRC		=	$(DSRC)socket.c			\
+			$(DSRC)ftp.c			\
+			$(DSRC)poll.c			\
+			$(DSRC)poll_connection.c	\
+			$(DSRC)connection.c		\
+			$(DUTILS)safe_alloc.c		\
+			$(DUTILS)exit_with.c		\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 
