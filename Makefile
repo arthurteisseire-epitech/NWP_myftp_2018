@@ -9,16 +9,18 @@ CC			=	gcc
 INC			=	include/
 DTESTS		=	tests/
 DSRC		=	src/
+DUTILS		=	$(DSRC)utils/
 DSRC_UT		=	tests/
 
 MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c		\
-			$(DSRC)error.c		\
 			$(DSRC)ftp.c		\
 			$(DSRC)poll.c		\
 			$(DSRC)poll_event.c	\
 			$(DSRC)event.c		\
+			$(DUTILS)safe_alloc.c	\
+			$(DUTILS)exit_with.c	\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 

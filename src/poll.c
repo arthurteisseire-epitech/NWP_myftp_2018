@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "poll.h"
-#include "myftp.h"
+#include "utils.h"
 
 poll_t *poll_init(void)
 {
@@ -16,15 +16,6 @@ poll_t *poll_init(void)
     if (poll == NULL)
         exit_with("failed to allocate memory for poll");
     return poll;
-}
-
-void poll_add_event(poll_t *poll, event_t fd)
-{
-    poll->readfds = realloc(poll->readfds, sizeof(fd) * (poll->size + 1));
-    if (poll->readfds == NULL)
-        exit_with("failed to realloc readfds");
-    poll->readfds[poll->size] = fd;
-    ++poll->size;
 }
 
 void poll_reload_set(poll_t *poll, fd_set *set)

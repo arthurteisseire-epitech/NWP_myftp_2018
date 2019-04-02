@@ -22,6 +22,7 @@ typedef struct event_s {
     sock_t sock;
     enum fd_type type;
     bool is_event;
+    struct event_s *next;
 } event_t;
 
 typedef struct poll_s {
@@ -30,12 +31,13 @@ typedef struct poll_s {
 } poll_t;
 
 poll_t *poll_init(void);
-void poll_add_event(poll_t *poll, event_t fd);
+void poll_add_event(poll_t *poll, event_t *event);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
 void poll_set_events(poll_t *poll, fd_set *set);
+void poll_remove_event(poll_t *poll, const event_t *event);
 const event_t *poll_event(poll_t *poll);
 
-event_t create_event(sock_t *sock, enum fd_type type);
+event_t *create_event(sock_t *sock, enum fd_type type);
 
 #endif

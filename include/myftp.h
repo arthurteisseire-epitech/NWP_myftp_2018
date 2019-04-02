@@ -11,6 +11,5 @@
 #include <stdarg.h>
 
 void start_ftp(int port);
-void exit_with(const char *msg, ...);
 
 #endif

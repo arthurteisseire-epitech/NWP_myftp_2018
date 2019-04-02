@@ -11,7 +11,8 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <stdio.h>
-#include "myftp.h"
+#include <netdb.h>
+#include "utils.h"
 #include "socket.h"
 
 sock_t init_socket(int fd, int port)
@@ -30,17 +31,21 @@ sock_t init_socket(int fd, int port)
 sock_t create_socket(int port)
 {
     sock_t sock;
-    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    int fd = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
     int optval = 1;
 
     if (fd < 0)
         exit_with("error when creating socket");
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int));
     sock = init_socket(fd, port);
-    if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) < 0)
-        exit_with("error on binding socket with port : '%d'", sock.port);
-    listen(sock.fd, 5);
     return sock;
+}
+
+void bind_socket(sock_t *sock)
+{
+    if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) < 0)
+        exit_with("error on binding socket with port : '%d'", sock->port);
+    listen(sock->fd, 5);
 }
 
 sock_t accept_connection(int fd)

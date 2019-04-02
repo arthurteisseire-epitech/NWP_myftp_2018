@@ -25,3 +25,10 @@ const event_t *poll_event(poll_t *poll)
         }
     return (NULL);
 }
+
+void poll_add_event(poll_t *poll, event_t *event)
+{
+    event->next = poll->readfds;
+    poll->readfds = event;
+    ++poll->size;
+}

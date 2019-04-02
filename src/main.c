@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include "myftp.h"
+#include "utils.h"
 #include "socket.h"
 
 long int get_port(const char *port_str)

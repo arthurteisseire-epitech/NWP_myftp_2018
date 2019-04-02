@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** PSU_myftp_2018
 ** File description:
-** error.c
+** exit_with.c
 */
 
 #include <stdarg.h>
