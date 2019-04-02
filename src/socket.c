@@ -24,6 +24,8 @@ sock_t create_socket(int port)
     sock.fd = socket(AF_INET, SOCK_STREAM, 0);
     if (sock.fd < 0)
         exit_with("error when creating socket");
+    bind_socket(&sock);
+    listen(sock.fd, 5);
     return sock;
 }
 

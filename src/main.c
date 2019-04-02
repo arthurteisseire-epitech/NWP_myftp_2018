@@ -38,11 +38,12 @@ int wait_connection(int fd)
     return (connfd);
 }
 
-void handle_events(set_t *set, sock_t *sock, fd_set *fd_s, int connfd)
+void handle_events(set_t *set, sock_t *sock, fd_set *fd_s)
 {
     int rd_bytes;
     char buffer[1024];
     fd_t *f;
+    int connfd;
 
     set_reload_fd_set(set, fd_s);
     select(set_find_max_fd(set) + 1, fd_s, NULL, NULL, NULL);
@@ -63,16 +64,12 @@ void start_ftp(int port)
     set_t *set = set_init();
     sock_t sock;
     fd_set fd_s;
-    int connfd = 987;
 
     sock = create_socket(port);
-    bind_socket(&sock);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    listen(sock.fd, 5);
-
     set_add_fd(set, (fd_t) {sock.fd, SERVER, false});
     for (int i = 0; i < 3; ++i)
-        handle_events(set, &sock, &fd_s, connfd);
+        handle_events(set, &sock, &fd_s);
     FD_CLR(sock.fd, &fd_s);
     close(sock.fd);
 }
