@@ -24,7 +24,6 @@ long int get_port(const char *port_str)
     return port;
 }
 
-
 int main(int ac, char *av[])
 {
     if (ac != 2)

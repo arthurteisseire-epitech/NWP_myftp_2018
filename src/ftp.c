@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
+#include <poll.h>
+#include <stdbool.h>
 #include "myftp.h"
 #include "poll.h"
 #include "socket.h"
@@ -27,34 +29,38 @@ int wait_connection(int fd)
     return (connfd);
 }
 
-void handle_events(poll_t *poll, sock_t *sock)
+void handle_event(poll_t *poll, int sockfd, const event_t *event)
 {
     int rd_bytes;
     char buffer[1024];
     int connfd;
+
+    if (event->type == SERVER) {
+        connfd = wait_connection(sockfd);
+        poll_add_fd(poll, (event_t) {connfd, CLIENT, false});
+    } else if (event->type == CLIENT) {
+        rd_bytes = read(event->fd, buffer, 1024);
+        write(event->fd, buffer, rd_bytes);
+    }
+}
+
+void handle_events(poll_t *poll, sock_t *sock)
+{
     fd_set set;
     event_t *event;
 
     poll_reload_set(poll, &set);
     select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);
     poll_set_events(poll, &set);
-    while ((event = poll_event(poll)) != NULL) {
-        if (event->type == SERVER) {
-            connfd = wait_connection((*sock).fd);
-            poll_add_fd(poll, (event_t) {connfd, CLIENT, false});
-        } else if (event->type == CLIENT) {
-            rd_bytes = read(event->fd, buffer, 1024);
-            write(event->fd, buffer, rd_bytes);
-        }
-    }
+    while ((event = poll_event(poll)) != NULL)
+        handle_event(poll, sock->fd, event);
 }
 
 void start_ftp(int port)
 {
     poll_t *poll = poll_init();
-    sock_t sock;
+    sock_t sock = create_socket(port);
 
-    sock = create_socket(port);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     poll_add_fd(poll, (event_t) {sock.fd, SERVER, false});
     for (int i = 0; i < 3; ++i)
