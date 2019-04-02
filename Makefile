@@ -15,6 +15,7 @@ MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c		\
 			$(DSRC)error.c		\
+			$(DSRC)ftp.c		\
 			$(DSRC)poll.c		\
 			$(DSRC)poll_event.c	\
 
