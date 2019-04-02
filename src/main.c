@@ -38,15 +38,32 @@ int wait_connection(int fd)
     return (connfd);
 }
 
+void handle_events(set_t *set, sock_t *sock, fd_set *fd_s, int connfd)
+{
+    int rd_bytes;
+    char buffer[1024];
+    fd_t *f;
+
+    set_reload_fd_set(set, fd_s);
+    select(set_find_max_fd(set) + 1, fd_s, NULL, NULL, NULL);
+    set_set_events(set, fd_s);
+    while ((f = set_poll_event(set)) != NULL) {
+        if (f->type == SERVER) {
+            connfd = wait_connection((*sock).fd);
+            set_add_fd(set, (fd_t) {connfd, CLIENT, false});
+        } else if (f->type == CLIENT) {
+            rd_bytes = read(f->fd, buffer, 1024);
+            write(f->fd, buffer, rd_bytes);
+        }
+    }
+}
+
 void start_ftp(int port)
 {
     set_t *set = set_init();
     sock_t sock;
     fd_set fd_s;
     int connfd = 987;
-    int rd_bytes;
-    char buffer[1024];
-    fd_t *f;
 
     sock = create_socket(port);
     bind_socket(&sock);
@@ -54,20 +71,8 @@ void start_ftp(int port)
     listen(sock.fd, 5);
 
     set_add_fd(set, (fd_t) {sock.fd, SERVER, false});
-    for (int i = 0; i < 3; ++i) {
-        set_reload_fd_set(set, &fd_s);
-        select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
-        set_set_events(set, &fd_s);
-        while ((f = set_poll_event(set)) != NULL) {
-            if (f->type == SERVER) {
-                connfd = wait_connection(sock.fd);
-                set_add_fd(set, (fd_t) {connfd, CLIENT, false});
-            } else if (f->type == CLIENT) {
-                rd_bytes = read(connfd, buffer, 1024);
-                write(connfd, buffer, rd_bytes);
-            }
-        }
-    }
+    for (int i = 0; i < 3; ++i)
+        handle_events(set, &sock, &fd_s, connfd);
     FD_CLR(sock.fd, &fd_s);
     close(sock.fd);
 }
