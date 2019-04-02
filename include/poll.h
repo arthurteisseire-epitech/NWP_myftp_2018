@@ -35,8 +35,8 @@ void poll_add_event(poll_t *poll, event_t *event);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
 void poll_set_events(poll_t *poll, fd_set *set);
-void poll_remove_event(poll_t *poll, const event_t *event);
-const event_t *poll_event(poll_t *poll);
+void poll_remove_event(poll_t *poll, event_t *event);
+event_t * poll_event(poll_t *poll);
 
 event_t *create_event(sock_t *sock, enum fd_type type);
 

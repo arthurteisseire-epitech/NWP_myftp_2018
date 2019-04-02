@@ -32,18 +32,17 @@
 //    return (sock);
 //}
 
-void handle_client_event(poll_t *poll, const event_t *event)
+void handle_client_event(poll_t *poll, event_t *event)
 {
     char buffer[1024] = {0};
     int rd_bytes = read(event->sock.fd, buffer, sizeof(buffer));
 
-    if (strncasecmp(buffer, "QUIT", 4) == 0) {
-        dprintf(event->sock.fd, "quit !\n");
-//        poll_remove_event(poll, event);
-    }
+    printf("%lu\n", poll->size);
+    if (strncasecmp(buffer, "QUIT", 4) == 0)
+        poll_remove_event(poll, event);
 }
 
-void handle_event(poll_t *poll, const event_t *event, int sockfd)
+void handle_event(poll_t *poll, event_t *event, int sockfd)
 {
     sock_t sock;
 
@@ -58,7 +57,7 @@ void handle_event(poll_t *poll, const event_t *event, int sockfd)
 void handle_events(poll_t *poll, sock_t *sock)
 {
     fd_set set;
-    const event_t *event;
+    event_t *event;
 
     poll_reload_set(poll, &set);
     select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);

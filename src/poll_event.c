@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include "poll.h"
 #include "myftp.h"
 
@@ -16,7 +17,7 @@ void poll_set_events(poll_t *poll, fd_set *set)
             poll->readfds[i].is_event = true;
 }
 
-const event_t *poll_event(poll_t *poll)
+event_t * poll_event(poll_t *poll)
 {
     for (size_t i = 0; i < poll->size; ++i)
         if (poll->readfds[i].is_event) {
@@ -31,4 +32,19 @@ void poll_add_event(poll_t *poll, event_t *event)
     event->next = poll->readfds;
     poll->readfds = event;
     ++poll->size;
+}
+
+void poll_remove_event(poll_t *poll, event_t *event)
+{
+    event_t **current = &poll->readfds;
+
+    while (*current != NULL) {
+        if (*current == event) {
+            *current = event->next;
+            close(event->sock.fd);
+            free(event);
+            --poll->size;
+        }
+        current = &(*current)->next;
+    }
 }
