@@ -23,17 +23,17 @@ typedef struct event_s {
     bool is_event;
 } event_t;
 
-typedef struct set_s {
+typedef struct poll_s {
     event_t *readfds;
     size_t size;
-} set_t;
+} poll_t;
 
-set_t *set_init(void);
-void set_add_fd(set_t *set, event_t fd);
-void set_reload_fd_set(set_t *set, fd_set *fd_s);
-int set_find_max_fd(set_t *set);
-void set_set_events(set_t *set, fd_set *fd_s);
-event_t *set_poll_event(set_t *set);
+poll_t *poll_init(void);
+void poll_add_fd(poll_t *poll, event_t fd);
+void poll_reload_set(poll_t *poll, fd_set *fd_s);
+int poll_find_max_fd(poll_t *poll);
+void poll_set_events(poll_t *poll, fd_set *fd_s);
+event_t *poll_event(poll_t *poll);
 void exit_with(const char *msg, ...);
 
 #endif

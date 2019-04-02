@@ -38,7 +38,7 @@ int wait_connection(int fd)
     return (connfd);
 }
 
-void handle_events(set_t *set, sock_t *sock)
+void handle_events(poll_t *poll, sock_t *sock)
 {
     int rd_bytes;
     char buffer[1024];
@@ -46,13 +46,13 @@ void handle_events(set_t *set, sock_t *sock)
     fd_set fd_s;
     event_t *event;
 
-    set_reload_fd_set(set, &fd_s);
-    select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
-    set_set_events(set, &fd_s);
-    while ((event = set_poll_event(set)) != NULL) {
+    poll_reload_set(poll, &fd_s);
+    select(poll_find_max_fd(poll) + 1, &fd_s, NULL, NULL, NULL);
+    poll_set_events(poll, &fd_s);
+    while ((event = poll_event(poll)) != NULL) {
         if (event->type == SERVER) {
             connfd = wait_connection((*sock).fd);
-            set_add_fd(set, (event_t) {connfd, CLIENT, false});
+            poll_add_fd(poll, (event_t) {connfd, CLIENT, false});
         } else if (event->type == CLIENT) {
             rd_bytes = read(event->fd, buffer, 1024);
             write(event->fd, buffer, rd_bytes);
@@ -62,14 +62,14 @@ void handle_events(set_t *set, sock_t *sock)
 
 void start_ftp(int port)
 {
-    set_t *set = set_init();
+    poll_t *poll = poll_init();
     sock_t sock;
 
     sock = create_socket(port);
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
-    set_add_fd(set, (event_t) {sock.fd, SERVER, false});
+    poll_add_fd(poll, (event_t) {sock.fd, SERVER, false});
     for (int i = 0; i < 3; ++i)
-        handle_events(set, &sock);
+        handle_events(poll, &sock);
     close(sock.fd);
 }
 

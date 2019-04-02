@@ -15,10 +15,10 @@ MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c		\
 			$(DSRC)error.c		\
-			$(DSRC)set.c		\
-			$(DSRC)set_event.c	\
+			$(DSRC)poll.c		\
+			$(DSRC)poll_event.c	\
 
-SRC_UT		=	$(DSRC_UT)set_test.c		\
+SRC_UT		=	$(DSRC_UT)poll_test.c		\
 
 CFLAGS		+=	-Wall -Wextra -I$(INC)
 OBJ			=	$(SRC:.c=.o) $(MAIN:.c=.o)
