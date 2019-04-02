@@ -46,6 +46,7 @@ void start_ftp(int port)
     int connfd = 987;
     int rd_bytes;
     char buffer[1024];
+    fd_t *f;
 
     sock = create_socket(port);
     bind_socket(&sock);
@@ -56,13 +57,15 @@ void start_ftp(int port)
     for (int i = 0; i < 3; ++i) {
         set_reload_fd_set(set, &fd_s);
         select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
-        if (FD_ISSET(sock.fd, &fd_s)) {
-            connfd = wait_connection(sock.fd);
-            set_add_fd(set, (fd_t) {connfd, CLIENT, false});
-        } else if (FD_ISSET(connfd, &fd_s)) {
-            printf("%d\n", FD_ISSET(connfd, &fd_s));
-            rd_bytes = read(connfd, buffer, 1024);
-            write(connfd, buffer, rd_bytes);
+        set_set_events(set, &fd_s);
+        while ((f = set_poll_event(set)) != NULL) {
+            if (f->type == SERVER) {
+                connfd = wait_connection(sock.fd);
+                set_add_fd(set, (fd_t) {connfd, CLIENT, false});
+            } else if (f->type == CLIENT) {
+                rd_bytes = read(connfd, buffer, 1024);
+                write(connfd, buffer, rd_bytes);
+            }
         }
     }
     FD_CLR(sock.fd, &fd_s);
