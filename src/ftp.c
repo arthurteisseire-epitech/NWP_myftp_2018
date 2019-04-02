@@ -11,22 +11,31 @@
 #include <sys/wait.h>
 #include <poll.h>
 #include <stdbool.h>
+#include <string.h>
 #include "myftp.h"
 #include "poll.h"
 #include "socket.h"
 
+void handle_client_event(const event_t *event)
+{
+    char buffer[1024] = {0};
+    int rd_bytes = read(event->sock.fd, buffer, sizeof(buffer));
+
+    dprintf(event->sock.fd, "%d\n", rd_bytes);
+    if (strcasecmp(buffer, "PASV\r\n") == 0) {
+        write(event->sock.fd, "PASV\n", 5);
+    }
+}
+
 void handle_event(poll_t *poll, const event_t *event, int sockfd)
 {
-    int rd_bytes;
-    char buffer[1024];
     sock_t sock;
 
     if (event->type == SERVER) {
         sock = accept_connection(sockfd);
         poll_add_event(poll, create_event(&sock, CLIENT));
     } else if (event->type == CLIENT) {
-        rd_bytes = read(event->sock.fd, buffer, 1024);
-        write(event->sock.fd, buffer, rd_bytes);
+        handle_client_event(event);
     }
 }
 
