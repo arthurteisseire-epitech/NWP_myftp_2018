@@ -15,7 +15,7 @@
 #include "poll.h"
 #include "socket.h"
 
-void handle_event(poll_t *poll, int sockfd, const event_t *event)
+void handle_event(poll_t *poll, const event_t *event, int sockfd)
 {
     int rd_bytes;
     char buffer[1024];
@@ -39,7 +39,7 @@ void handle_events(poll_t *poll, sock_t *sock)
     select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);
     poll_set_events(poll, &set);
     while ((event = poll_event(poll)) != NULL)
-        handle_event(poll, sock->fd, event);
+        handle_event(poll, event, sock->fd);
 }
 
 void start_ftp(int port)
