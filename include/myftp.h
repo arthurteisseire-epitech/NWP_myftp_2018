@@ -9,6 +9,7 @@
 #define PSU_MYFTP_2018_MYFTP_H
 
 #include <stdarg.h>
+#include <stdbool.h>
 
 enum fd_type {
     SERVER,
@@ -19,6 +20,7 @@ enum fd_type {
 typedef struct fd_s {
     int fd;
     enum fd_type type;
+    bool is_event;
 } fd_t;
 
 typedef struct set_s {
@@ -30,6 +32,7 @@ set_t *set_init(void);
 void set_add_fd(set_t *set, fd_t fd);
 void set_reload_fd_set(set_t *set, fd_set *fd_s);
 int set_find_max_fd(set_t *set);
+void set_set_events(set_t *set, fd_set *fd_s);
 void exit_with(const char *msg, ...);
 
 #endif

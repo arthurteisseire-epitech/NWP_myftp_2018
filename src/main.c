@@ -33,7 +33,8 @@ int wait_connection(int fd)
     connfd = accept(fd, (struct sockaddr *) &client, &len);
     if (connfd < 0)
         exit_with("error when accepting");
-    dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr), htons(client.sin_port));
+    dprintf(connfd, "ip : %s, port: %d\n", inet_ntoa(client.sin_addr),
+            htons(client.sin_port));
     return (connfd);
 }
 
@@ -51,13 +52,13 @@ void start_ftp(int port)
     printf("%s\n", inet_ntoa(sock.info.sin_addr));
     listen(sock.fd, 5);
 
-    set_add_fd(set, (fd_t){sock.fd, SERVER});
+    set_add_fd(set, (fd_t) {sock.fd, SERVER, false});
     for (int i = 0; i < 3; ++i) {
         set_reload_fd_set(set, &fd_s);
         select(set_find_max_fd(set) + 1, &fd_s, NULL, NULL, NULL);
-        if (FD_ISSET((sock).fd, &fd_s)) {
-            connfd = wait_connection((sock).fd);
-            set_add_fd(set, (fd_t) {connfd, CLIENT});
+        if (FD_ISSET(sock.fd, &fd_s)) {
+            connfd = wait_connection(sock.fd);
+            set_add_fd(set, (fd_t) {connfd, CLIENT, false});
         } else if (FD_ISSET(connfd, &fd_s)) {
             printf("%d\n", FD_ISSET(connfd, &fd_s));
             rd_bytes = read(connfd, buffer, 1024);
