@@ -17,7 +17,7 @@ set_t *set_init(void)
     return set;
 }
 
-void set_add_fd(set_t *set, fd_t fd)
+void set_add_fd(set_t *set, event_t fd)
 {
     set->readfds = realloc(set->readfds, sizeof(fd) * (set->size + 1));
     if (set->readfds == NULL)

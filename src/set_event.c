@@ -15,7 +15,7 @@ void set_set_events(set_t *set, fd_set *fd_s)
             set->readfds[i].is_event = true;
 }
 
-fd_t *set_poll_event(set_t *set)
+event_t *set_poll_event(set_t *set)
 {
     for (size_t i = 0; i < set->size; ++i)
         if (set->readfds[i].is_event) {

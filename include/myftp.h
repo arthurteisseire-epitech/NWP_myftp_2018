@@ -17,23 +17,23 @@ enum fd_type {
     FREE
 };
 
-typedef struct fd_s {
+typedef struct event_s {
     int fd;
     enum fd_type type;
     bool is_event;
-} fd_t;
+} event_t;
 
 typedef struct set_s {
-    fd_t *readfds;
+    event_t *readfds;
     size_t size;
 } set_t;
 
 set_t *set_init(void);
-void set_add_fd(set_t *set, fd_t fd);
+void set_add_fd(set_t *set, event_t fd);
 void set_reload_fd_set(set_t *set, fd_set *fd_s);
 int set_find_max_fd(set_t *set);
 void set_set_events(set_t *set, fd_set *fd_s);
-fd_t *set_poll_event(set_t *set);
+event_t *set_poll_event(set_t *set);
 void exit_with(const char *msg, ...);
 
 #endif
