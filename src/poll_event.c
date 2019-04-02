@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include "poll.h"
 #include "myftp.h"
 
 void poll_set_events(poll_t *poll, fd_set *set)

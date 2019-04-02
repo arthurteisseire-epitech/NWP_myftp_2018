@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include "poll.h"
 #include "myftp.h"
 
 poll_t *poll_init(void)

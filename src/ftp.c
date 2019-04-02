@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include "myftp.h"
+#include "poll.h"
 #include "socket.h"
 
 int wait_connection(int fd)
