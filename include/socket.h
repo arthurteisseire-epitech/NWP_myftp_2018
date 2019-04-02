@@ -19,6 +19,6 @@ typedef struct sock_s {
 
 sock_t init_socket(int fd, int port);
 sock_t create_socket(int port);
-void bind_socket(sock_t *sock);
+sock_t accept_connection(int fd);
 
 #endif

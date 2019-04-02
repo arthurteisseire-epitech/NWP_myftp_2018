@@ -15,19 +15,6 @@
 #include "poll.h"
 #include "socket.h"
 
-sock_t create_connection(int fd)
-{
-    sock_t sock;
-
-    sock.size_info = sizeof(struct sockaddr_in);
-    sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
-    if (sock.fd < 0)
-        exit_with("error when accepting");
-    dprintf(sock.fd, "ip : %s, port: %d\n", inet_ntoa(sock.info.sin_addr),
-            htons(sock.info.sin_port));
-    return (sock);
-}
-
 void handle_event(poll_t *poll, int sockfd, const event_t *event)
 {
     int rd_bytes;
@@ -35,7 +22,7 @@ void handle_event(poll_t *poll, int sockfd, const event_t *event)
     sock_t sock;
 
     if (event->type == SERVER) {
-        sock = create_connection(sockfd);
+        sock = accept_connection(sockfd);
         poll_add_event(poll, create_event(&sock, CLIENT));
     } else if (event->type == CLIENT) {
         rd_bytes = read(event->sock.fd, buffer, 1024);

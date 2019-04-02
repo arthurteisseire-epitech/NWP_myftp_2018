@@ -9,6 +9,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
+#include <stdio.h>
 #include "myftp.h"
 #include "socket.h"
 
@@ -33,13 +35,21 @@ sock_t create_socket(int port)
     if (fd < 0)
         exit_with("error when creating socket");
     sock = init_socket(fd, port);
-    bind_socket(&sock);
+    if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) < 0)
+        exit_with("error on binding socket with port : '%d'", sock.port);
     listen(sock.fd, 5);
     return sock;
 }
 
-void bind_socket(sock_t *sock)
+sock_t accept_connection(int fd)
 {
-    if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) < 0)
-        exit_with("error on binding socket with port : '%d'", sock->port);
+    sock_t sock;
+
+    sock.size_info = sizeof(struct sockaddr_in);
+    sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
+    if (sock.fd < 0)
+        exit_with("error when accepting");
+    dprintf(sock.fd, "ip : %s, port: %d\n", inet_ntoa(sock.info.sin_addr),
+            htons(sock.info.sin_port));
+    return (sock);
 }
