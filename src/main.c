@@ -43,12 +43,12 @@ void handle_events(poll_t *poll, sock_t *sock)
     int rd_bytes;
     char buffer[1024];
     int connfd;
-    fd_set fd_s;
+    fd_set set;
     event_t *event;
 
-    poll_reload_set(poll, &fd_s);
-    select(poll_find_max_fd(poll) + 1, &fd_s, NULL, NULL, NULL);
-    poll_set_events(poll, &fd_s);
+    poll_reload_set(poll, &set);
+    select(poll_find_max_fd(poll) + 1, &set, NULL, NULL, NULL);
+    poll_set_events(poll, &set);
     while ((event = poll_event(poll)) != NULL) {
         if (event->type == SERVER) {
             connfd = wait_connection((*sock).fd);

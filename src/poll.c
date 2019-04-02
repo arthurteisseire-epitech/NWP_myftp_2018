@@ -26,12 +26,12 @@ void poll_add_fd(poll_t *poll, event_t fd)
     ++poll->size;
 }
 
-void poll_reload_set(poll_t *poll, fd_set *fd_s)
+void poll_reload_set(poll_t *poll, fd_set *set)
 {
-    FD_ZERO(fd_s);
+    FD_ZERO(set);
     for (size_t i = 0; i < poll->size; ++i)
         if (poll->readfds[i].type != FREE)
-            FD_SET(poll->readfds[i].fd, fd_s);
+            FD_SET(poll->readfds[i].fd, set);
 }
 
 int poll_find_max_fd(poll_t *poll)

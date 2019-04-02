@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include "myftp.h"
 
-void poll_set_events(poll_t *poll, fd_set *fd_s)
+void poll_set_events(poll_t *poll, fd_set *set)
 {
     for (size_t i = 0; i < poll->size; ++i)
-        if (FD_ISSET(poll->readfds[i].fd, fd_s))
+        if (FD_ISSET(poll->readfds[i].fd, set))
             poll->readfds[i].is_event = true;
 }
 
