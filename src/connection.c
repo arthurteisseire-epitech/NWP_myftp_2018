@@ -28,3 +28,10 @@ connection_t *create_connection(sock_t *sock, enum fd_type type)
     conn->next = NULL;
     return (conn);
 }
+
+void delete_connection(connection_t *conn)
+{
+    free(conn->user.name);
+    free(conn->user.password);
+    free(conn);
+}

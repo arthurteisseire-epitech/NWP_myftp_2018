@@ -50,7 +50,7 @@ void poll_remove_conn(poll_t *poll, connection_t *conn)
         if (*current == conn) {
             *current = conn->next;
             close(conn->sock.fd);
-            free(conn);
+            delete_connection(conn);
             --poll->size;
         }
         current = &(*current)->next;

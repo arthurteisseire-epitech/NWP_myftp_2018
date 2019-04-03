@@ -45,5 +45,6 @@ void poll_remove_conn(poll_t *poll, connection_t *conn);
 connection_t *poll_connection(poll_t *poll);
 
 connection_t *create_connection(sock_t *sock, enum fd_type type);
+void delete_connection(connection_t *conn);
 
 #endif
