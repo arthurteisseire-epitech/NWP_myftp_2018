@@ -40,6 +40,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
     if (conn->type == SERVER) {
         sock = accept_connection(sockfd);
         poll_add_conn(poll, create_connection(&sock, CLIENT));
+        dprintf(sock.fd, "220 (vsFTPd 3.0.0)\n");
     } else if (conn->type == CLIENT) {
         exec_command(poll, conn);
     }
@@ -63,7 +64,6 @@ void start_ftp(int port)
     sock_t sock = create_socket(port);
 
     bind_socket(&sock);
-    printf("%s\n", inet_ntoa(sock.info.sin_addr));
     poll_add_conn(poll, create_connection(&sock, SERVER));
     while (1)
         handle_connections(poll, &sock);

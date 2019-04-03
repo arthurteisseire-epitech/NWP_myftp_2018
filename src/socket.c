@@ -56,7 +56,5 @@ sock_t accept_connection(int fd)
     sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
     if (sock.fd < 0)
         exit_with("error when accepting");
-    dprintf(sock.fd, "ip : %s, port: %d\n", inet_ntoa(sock.info.sin_addr),
-            htons(sock.info.sin_port));
     return (sock);
 }
