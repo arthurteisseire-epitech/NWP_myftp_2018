@@ -16,6 +16,7 @@ enum code_e {
     CODE_LOGIN_FIRST = 503,
     CODE_LOGIN_INCORRECT = 530,
     CODE_LOGIN_SUCCESS = 230,
+    CODE_COMMAND_NOT_FOUND = 500,
 };
 
 struct code_message_s {
@@ -29,6 +30,7 @@ static const struct code_message_s codes[] = {
     {CODE_LOGIN_FIRST, "Login with USER first."},
     {CODE_LOGIN_INCORRECT, "Login incorrect."},
     {CODE_LOGIN_SUCCESS, "Login successful."},
+    {CODE_COMMAND_NOT_FOUND, "Unknown command."},
     {0, NULL},
 };
 

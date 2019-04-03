@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include "code.h"
 #include "utils.h"
 #include "myftp.h"
 #include "command.h"
@@ -40,11 +41,17 @@ static int exec_admin_command(poll_t *poll, connection_t *conn,
 void exec_command(poll_t *poll, connection_t *conn)
 {
     char input[64] = {0};
+    char *p = input;
     int rd_bytes = read(conn->sock.fd, input, sizeof(input));
     int status;
 
     input[rd_bytes] = '\0';
+    p += strspn(input, " \n\r");
+    if (p[0] == '\0')
+        return;
     status = exec_guest_command(poll, conn, input);
     if (status == COMMAND_NOT_FOUND && is_admin(&conn->user))
-        exec_admin_command(poll, conn, input);
+        status = exec_admin_command(poll, conn, input);
+    if (status == COMMAND_NOT_FOUND)
+        send_message(conn->sock.fd, CODE_COMMAND_NOT_FOUND);
 }

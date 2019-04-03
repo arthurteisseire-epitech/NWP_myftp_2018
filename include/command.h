@@ -27,11 +27,11 @@ static const struct command_s guest_commands[] = {
     {"QUIT", command_quit},
     {"USER", command_user},
     {"PASS", command_pass},
-    {"PWD", command_pwd},
     {NULL, NULL},
 };
 
 static const struct command_s admin_commands[] = {
+    {"PWD", command_pwd},
     {NULL, NULL},
 };
 
