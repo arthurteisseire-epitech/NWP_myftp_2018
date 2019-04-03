@@ -59,9 +59,9 @@ void handle_connections(poll_t *poll, sock_t *sock)
         handle_connection(poll, conn, sock->fd);
 }
 
-void start_ftp(int port)
+void start_ftp(int port, const char *path)
 {
-    poll_t *poll = poll_init();
+    poll_t *poll = poll_init(path);
     sock_t sock = create_socket(port);
 
     bind_socket(&sock);

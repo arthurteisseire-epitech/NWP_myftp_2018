@@ -13,6 +13,6 @@
 #define USERNAME "Anonymous"
 #define PASSWORD ""
 
-void start_ftp(int port);
+void start_ftp(int port, const char *path);
 
 #endif

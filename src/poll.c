@@ -9,10 +9,11 @@
 #include "poll.h"
 #include "utils.h"
 
-poll_t *poll_init(void)
+poll_t *poll_init(const char *path)
 {
     poll_t *poll = safe_malloc(sizeof(poll_t));
 
+    poll->path = path;
     poll->size = 0;
     poll->conn = NULL;
     return poll;

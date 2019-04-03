@@ -27,8 +27,8 @@ long int get_port(const char *port_str)
 
 int main(int ac, char *av[])
 {
-    if (ac != 2)
+    if (ac != 3)
         return (84);
-    start_ftp(get_port(av[1]));
+    start_ftp(get_port(av[1]), NULL);
     return (0);
 }

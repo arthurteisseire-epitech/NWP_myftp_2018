@@ -33,10 +33,11 @@ typedef struct connection_s {
 
 typedef struct poll_s {
     connection_t *conn;
+    const char *path;
     size_t size;
 } poll_t;
 
-poll_t *poll_init(void);
+poll_t *poll_init(const char *path);
 void poll_add_conn(poll_t *poll, connection_t *conn);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
