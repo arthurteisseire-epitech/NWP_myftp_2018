@@ -6,12 +6,13 @@
 */
 
 #include <stdio.h>
+#include "code.h"
 #include "command.h"
 
 int command_quit(poll_t *poll, connection_t *conn,
     __attribute((unused))const char *input)
 {
-    dprintf(conn->sock.fd, "bye\n");
+    send_message(conn->sock.fd, CODE_QUIT);
     poll_remove_conn(poll, conn);
     return (0);
 }
