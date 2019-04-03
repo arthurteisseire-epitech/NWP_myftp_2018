@@ -9,22 +9,21 @@
 #include "poll.h"
 #include <string.h>
 
-static struct user_s init_user(const char *path)
+static struct user_s init_user(void)
 {
     struct user_s user;
 
     user.password = NULL;
     user.name = NULL;
-    user.path = strdup(path);
+    user.path = strdup("/");
     return (user);
 }
 
-connection_t *create_connection(sock_t *sock, enum fd_type type,
-                                char *path)
+connection_t *create_connection(sock_t *sock, enum fd_type type)
 {
     connection_t *conn = safe_malloc(sizeof(connection_t));
 
-    conn->user = init_user(path);
+    conn->user = init_user();
     conn->sock = *sock;
     conn->type = type;
     conn->is_event = false;

@@ -27,6 +27,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DCOMMANDS)command_quit.c	\
 			$(DCOMMANDS)command_user.c	\
 			$(DCOMMANDS)command_pass.c	\
+			$(DCOMMANDS)command_pwd.c	\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 

@@ -38,7 +38,7 @@ typedef struct poll_s {
     size_t size;
 } poll_t;
 
-poll_t *poll_init(const char *path);
+poll_t *poll_init(char *path);
 void poll_add_conn(poll_t *poll, connection_t *conn);
 void poll_reload_set(poll_t *poll, fd_set *set);
 int poll_find_max_fd(poll_t *poll);
@@ -46,8 +46,7 @@ void poll_set_conns(poll_t *poll, fd_set *set);
 void poll_remove_conn(poll_t *poll, connection_t *conn);
 connection_t *poll_connection(poll_t *poll);
 
-connection_t *create_connection(sock_t *sock, enum fd_type type,
-                                char *path);
+connection_t *create_connection(sock_t *sock, enum fd_type type);
 void delete_connection(connection_t *conn);
 
 #endif

@@ -9,7 +9,7 @@
 #include "poll.h"
 #include "utils.h"
 
-poll_t *poll_init(const char *path)
+poll_t *poll_init(char *path)
 {
     poll_t *poll = safe_malloc(sizeof(poll_t));
 

@@ -21,11 +21,13 @@ void exec_command(poll_t *poll, connection_t *conn);
 int command_quit(poll_t *poll, connection_t *conn, const char *input);
 int command_user(poll_t *poll, connection_t *conn, const char *input);
 int command_pass(poll_t *poll, connection_t *conn, const char *input);
+int command_pwd(poll_t *poll, connection_t *conn, const char *input);
 
 static const struct command_s guest_commands[] = {
     {"QUIT", command_quit},
     {"USER", command_user},
     {"PASS", command_pass},
+    {"PWD", command_pwd},
     {NULL, NULL},
 };
 
