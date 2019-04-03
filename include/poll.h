@@ -21,6 +21,7 @@ enum fd_type {
 struct user_s {
     char *name;
     char *password;
+    char *path;
 };
 
 typedef struct connection_s {
@@ -33,7 +34,7 @@ typedef struct connection_s {
 
 typedef struct poll_s {
     connection_t *conn;
-    const char *path;
+    char *path;
     size_t size;
 } poll_t;
 
@@ -45,7 +46,8 @@ void poll_set_conns(poll_t *poll, fd_set *set);
 void poll_remove_conn(poll_t *poll, connection_t *conn);
 connection_t *poll_connection(poll_t *poll);
 
-connection_t *create_connection(sock_t *sock, enum fd_type type);
+connection_t *create_connection(sock_t *sock, enum fd_type type,
+                                char *path);
 void delete_connection(connection_t *conn);
 
 #endif

@@ -29,6 +29,6 @@ int main(int ac, char *av[])
 {
     if (ac != 3)
         return (84);
-    start_ftp(get_port(av[1]), NULL);
+    start_ftp(get_port(av[1]), av[2]);
     return (0);
 }
