@@ -9,7 +9,7 @@
 #include <string.h>
 #include "command.h"
 
-bool startsWith(const char *pre, const char *str)
+static bool begin_with(const char *pre, const char *str)
 {
     size_t len_pre = strlen(pre);
     size_t len_str = strlen(str);
@@ -24,6 +24,6 @@ void exec_command(poll_t *poll, connection_t *conn)
 
     input[rd_bytes] = '\0';
     for (int i = 0; commands[i].name; ++i)
-        if (startsWith(commands[i].name, input))
+        if (begin_with(commands[i].name, input))
             commands[i].f(poll, conn, input);
 }
