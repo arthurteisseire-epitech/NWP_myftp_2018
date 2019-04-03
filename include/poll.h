@@ -18,7 +18,13 @@ enum fd_type {
     FREE
 };
 
+struct user_s {
+    char *name;
+    char *password;
+};
+
 typedef struct connection_s {
+    struct user_s user;
     sock_t sock;
     enum fd_type type;
     bool is_event;

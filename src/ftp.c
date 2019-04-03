@@ -16,6 +16,7 @@
 #include "myftp.h"
 #include "poll.h"
 #include "socket.h"
+#include "command.h"
 
 //static sock_t create_socket_with_free_port(void)
 //{
@@ -32,16 +33,23 @@
 //    return (sock);
 //}
 
+bool startsWith(const char *pre, const char *str)
+{
+    size_t len_pre = strlen(pre);
+    size_t len_str = strlen(str);
+
+    return len_str < len_pre ? false : strncasecmp(pre, str, len_pre) == 0;
+}
+
 void handle_client_connection(poll_t *poll, connection_t *conn)
 {
-    char buffer[1024] = {0};
-    int rd_bytes = read(conn->sock.fd, buffer, sizeof(buffer));
+    char input[64] = {0};
+    int rd_bytes = read(conn->sock.fd, input, sizeof(input));
 
-    if (strncasecmp(buffer, "QUIT", 4) == 0)
-        poll_remove_conn(poll, conn);
-    else if (strncasecmp(buffer, "USER", 4) == 0) {
-        dprintf(conn->sock.fd, "hello user");
-    }
+    input[rd_bytes] = '\0';
+    for (int i = 0; commands[i].name; ++i)
+        if (startsWith(commands[i].name, input))
+            commands[i].f(poll, conn, input);
 }
 
 void handle_connection(poll_t *poll, connection_t *conn, int sockfd)

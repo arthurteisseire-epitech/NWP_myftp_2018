@@ -10,6 +10,7 @@ INC			=	include/
 DTESTS		=	tests/
 DSRC		=	src/
 DUTILS		=	$(DSRC)utils/
+DCOMMANDS	=	$(DSRC)commands/
 DSRC_UT		=	tests/
 
 MAIN		=	$(DSRC)main.c		\
@@ -21,6 +22,9 @@ SRC		=	$(DSRC)socket.c			\
 			$(DSRC)connection.c		\
 			$(DUTILS)safe_alloc.c		\
 			$(DUTILS)exit_with.c		\
+			$(DCOMMANDS)command_quit.c	\
+			$(DCOMMANDS)command_user.c	\
+			$(DCOMMANDS)command_pass.c	\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 
