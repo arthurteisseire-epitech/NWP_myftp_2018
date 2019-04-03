@@ -13,7 +13,9 @@
 
 static bool is_admin(struct user_s *user)
 {
-    return (strcmp(user->name, USERNAME) == 0
+    return (user->name != NULL &&
+    user->password != NULL &&
+    strcmp(user->name, USERNAME) == 0
     && strcmp(user->password, PASSWORD) == 0);
 }
 
@@ -43,6 +45,6 @@ void exec_command(poll_t *poll, connection_t *conn)
 
     input[rd_bytes] = '\0';
     status = exec_guest_command(poll, conn, input);
-    if (is_admin(&conn->user) && status == COMMAND_NOT_FOUND)
+    if (status == COMMAND_NOT_FOUND && is_admin(&conn->user))
         exec_admin_command(poll, conn, input);
 }

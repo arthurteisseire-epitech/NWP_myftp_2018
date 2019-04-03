@@ -12,18 +12,26 @@
 
 void poll_set_conns(poll_t *poll, fd_set *set)
 {
-    for (size_t i = 0; i < poll->size; ++i)
-        if (FD_ISSET(poll->conn[i].sock.fd, set))
-            poll->conn[i].is_event = true;
+    connection_t *current = poll->conn;
+
+    while (current != NULL) {
+        if (FD_ISSET(current->sock.fd, set))
+            current->is_event = true;
+        current = current->next;
+    }
 }
 
-connection_t * poll_connection(poll_t *poll)
+connection_t *poll_connection(poll_t *poll)
 {
-    for (size_t i = 0; i < poll->size; ++i)
-        if (poll->conn[i].is_event) {
-            poll->conn[i].is_event = false;
-            return (&poll->conn[i]);
+    connection_t *current = poll->conn;
+
+    while (current != NULL) {
+        if (current->is_event) {
+            current->is_event = false;
+            return (current);
         }
+        current = current->next;
+    }
     return (NULL);
 }
 

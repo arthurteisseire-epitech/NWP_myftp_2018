@@ -11,27 +11,34 @@
 
 poll_t *poll_init(void)
 {
-    poll_t *poll = calloc(1, sizeof(poll_t));
+    poll_t *poll = safe_malloc(sizeof(poll_t));
 
-    if (poll == NULL)
-        exit_with("failed to allocate memory for poll");
+    poll->size = 0;
+    poll->conn = NULL;
     return poll;
 }
 
 void poll_reload_set(poll_t *poll, fd_set *set)
 {
+    connection_t *current = poll->conn;
+
     FD_ZERO(set);
-    for (size_t i = 0; i < poll->size; ++i)
-        if (poll->conn[i].type != FREE)
-            FD_SET(poll->conn[i].sock.fd, set);
+    while (current != NULL) {
+        if (current->type != FREE)
+            FD_SET(current->sock.fd, set);
+        current = current->next;
+    }
 }
 
 int poll_find_max_fd(poll_t *poll)
 {
     int max = 0;
+    connection_t *current = poll->conn;
 
-    for (size_t i = 0; i < poll->size; ++i)
-        if (poll->conn[i].sock.fd > max)
-            max = poll->conn[i].sock.fd;
+    while (current != NULL) {
+        if (current->sock.fd > max)
+            max = current->sock.fd;
+        current = current->next;
+    }
     return (max);
 }
