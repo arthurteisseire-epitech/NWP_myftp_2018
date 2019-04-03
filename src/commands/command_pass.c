@@ -7,6 +7,8 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "myftp.h"
+#include "code.h"
 #include "poll.h"
 
 int command_pass(__attribute((unused))poll_t *poll,
@@ -14,13 +16,19 @@ int command_pass(__attribute((unused))poll_t *poll,
 {
     char *p = (char *)input;
 
-    if (strcmp(conn->user.name, "Anonymous") == 0) {
+    if (!conn->user.name) {
+        send_message(conn->sock.fd, CODE_LOGIN_FIRST);
+        return (0);
+    }
+    if (strcmp(conn->user.name, USERNAME) == 0) {
         p += 4;
         p += strspn(p, " \r\n");
-        dprintf(conn->sock.fd, "%s\n", p);
-        if (*p == 0) {
-            dprintf(conn->sock.fd, "connected\n");
-        }
+        free(conn->user.password);
+        conn->user.password = strdup(p);
+        if (*p == '\0')
+            send_message(conn->sock.fd, CODE_LOGIN_SUCCESS);
+    } else {
+        send_message(conn->sock.fd, CODE_LOGIN_INCORRECT);
     }
     return (0);
 }

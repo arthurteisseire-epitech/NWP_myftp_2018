@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "code.h"
 #include "myftp.h"
 #include "command.h"
 
@@ -15,12 +16,11 @@ int command_user(__attribute((unused))poll_t *poll,
 {
     char *p = (char *)input + 4;
 
-    p += strspn(p, " ");
-    if (strncmp(p, USERNAME, sizeof(USERNAME) - 1) == 0) {
-        conn->user.name = USERNAME;
-        dprintf(conn->sock.fd, "%d User name okay, need password.\n", 331);
-    } else {
-        dprintf(conn->sock.fd, "%d Invalid username or password.\n", 430);
-    }
+    p += strspn(p, " \r\n");
+    if (conn->user.name && strcmp(conn->user.name, USERNAME) == 0)
+        return (0);
+    free(conn->user.name);
+    conn->user.name = strndup(p, strcspn(p, " \r\n"));
+    send_message(conn->sock.fd, CODE_USER);
     return (0);
 }

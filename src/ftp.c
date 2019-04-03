@@ -17,6 +17,7 @@
 #include "poll.h"
 #include "socket.h"
 #include "command.h"
+#include "code.h"
 
 //static sock_t create_socket_with_free_port(void)
 //{
@@ -40,7 +41,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
     if (conn->type == SERVER) {
         sock = accept_connection(sockfd);
         poll_add_conn(poll, create_connection(&sock, CLIENT));
-        dprintf(sock.fd, "220 (vsFTPd 3.0.0)\n");
+        send_message(sock.fd, CODE_CONNECTION);
     } else if (conn->type == CLIENT) {
         exec_command(poll, conn);
     }
