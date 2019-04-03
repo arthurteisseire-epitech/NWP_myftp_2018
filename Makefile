@@ -22,6 +22,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DSRC)connection.c		\
 			$(DUTILS)safe_alloc.c		\
 			$(DUTILS)exit_with.c		\
+			$(DUTILS)begin_with.c		\
 			$(DCOMMANDS)exec_command.c	\
 			$(DCOMMANDS)command_quit.c	\
 			$(DCOMMANDS)command_user.c	\

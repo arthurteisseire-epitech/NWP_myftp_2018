@@ -10,6 +10,9 @@
 
 #include <stdarg.h>
 
+#define USERNAME "Anonymous"
+#define PASSWORD ""
+
 void start_ftp(int port);
 
 #endif
