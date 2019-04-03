@@ -10,7 +10,7 @@
 
 #include "poll.h"
 
-#define COMMAND_NOT_FOUND -1
+#define COMMAND_NOT_FOUND -12
 
 struct command_s {
     const char *name;

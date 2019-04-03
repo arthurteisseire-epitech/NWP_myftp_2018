@@ -18,9 +18,9 @@ int command_user(__attribute((unused))poll_t *poll,
     p += strspn(p, " ");
     if (strncmp(p, USERNAME, sizeof(USERNAME) - 1) == 0) {
         conn->user.name = USERNAME;
-        dprintf(conn->sock.fd, "hello %s\n", conn->user.name);
+        dprintf(conn->sock.fd, "%d User name okay, need password.\n", 331);
     } else {
-        dprintf(conn->sock.fd, "Unknown user\n");
+        dprintf(conn->sock.fd, "%d Invalid username or password.\n", 430);
     }
     return (0);
 }
