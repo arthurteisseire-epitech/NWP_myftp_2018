@@ -12,6 +12,6 @@
 int command_pwd(__attribute((unused))poll_t *poll, connection_t *conn,
     __attribute((unused))const char *input)
 {
-    dprintf(conn->sock.fd, "257 \"%s\"\n", conn->user.path);
+    dprintf(conn->sock.fd, "257 \"%s\"\r\n", conn->user.path);
     return (0);
 }

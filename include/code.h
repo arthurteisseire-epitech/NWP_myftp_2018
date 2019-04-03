@@ -40,10 +40,10 @@ static inline void send_message(int fd, enum code_e code)
 {
     for (int i = 0; codes[i].message; ++i)
         if (codes[i].code == code) {
-            dprintf(fd, "%d %s\n", code, codes[i].message);
+            dprintf(fd, "%d %s\r\n", code, codes[i].message);
             return;
         }
-    dprintf(fd, "%d Code not implemented\n", code);
+    dprintf(fd, "%d Code not implemented\r\n", code);
 }
 
 #endif
