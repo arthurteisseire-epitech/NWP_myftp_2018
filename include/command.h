@@ -15,6 +15,7 @@ struct command_s {
     int (*f)(poll_t *poll, connection_t *conn, const char *input);
 };
 
+void exec_command(poll_t *poll, connection_t *conn);
 int command_quit(poll_t *poll, connection_t *conn, const char *input);
 int command_user(poll_t *poll, connection_t *conn, const char *input);
 int command_pass(poll_t *poll, connection_t *conn, const char *input);

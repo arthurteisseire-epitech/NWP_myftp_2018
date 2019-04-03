@@ -33,25 +33,6 @@
 //    return (sock);
 //}
 
-bool startsWith(const char *pre, const char *str)
-{
-    size_t len_pre = strlen(pre);
-    size_t len_str = strlen(str);
-
-    return len_str < len_pre ? false : strncasecmp(pre, str, len_pre) == 0;
-}
-
-void handle_client_connection(poll_t *poll, connection_t *conn)
-{
-    char input[64] = {0};
-    int rd_bytes = read(conn->sock.fd, input, sizeof(input));
-
-    input[rd_bytes] = '\0';
-    for (int i = 0; commands[i].name; ++i)
-        if (startsWith(commands[i].name, input))
-            commands[i].f(poll, conn, input);
-}
-
 void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
 {
     sock_t sock;
@@ -60,7 +41,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
         sock = accept_connection(sockfd);
         poll_add_conn(poll, create_connection(&sock, CLIENT));
     } else if (conn->type == CLIENT) {
-        handle_client_connection(poll, conn);
+        exec_command(poll, conn);
     }
 }
 
