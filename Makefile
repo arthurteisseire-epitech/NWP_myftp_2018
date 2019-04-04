@@ -6,8 +6,7 @@
 ##
 
 CC		=	gcc
-INC		=	-Iinclude/ -Ilib/string_ext/include
-LIBS		=	-Llib/string_ext/ -lstring_ext
+INC		=	-Iinclude/
 DTESTS		=	tests/
 DSRC		=	src/
 DUTILS		=	$(DSRC)utils/
@@ -45,7 +44,7 @@ OBJ			=	$(SRC:.c=.o) $(MAIN:.c=.o)
 NAME		=	myftp
 
 all: $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LIBS)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
 
 clean:
 	rm -f $(OBJ)

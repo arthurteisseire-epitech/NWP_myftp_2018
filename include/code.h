@@ -42,7 +42,7 @@ static const struct code_message_s codes[] = {
     {CODE_OK, "ok."},
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
-    {CODE_PASSIVE_MODE, ""},
+    {CODE_PASSIVE_MODE, "Entering Passive Mode"},
     {0, NULL},
 };
 

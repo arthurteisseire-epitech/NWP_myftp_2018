@@ -6,25 +6,31 @@
 */
 
 #include <arpa/inet.h>
-#include "string_ext.h"
+#include <string.h>
 #include "code.h"
 #include "poll.h"
 
+void replace(char *str, char old, char new)
+{
+    for (int i = 0; str[i]; ++i)
+        if (str[i] == old)
+            str[i] = new;
+}
+
 void send_ok_message(const connection_t *conn, sock_t *data_sock)
 {
-    char **tok = strsplit(inet_ntoa(data_sock->info.sin_addr), ".");
-    char *ip = strjoin((const char **) tok, ", ");
+    char *ip = strdup(inet_ntoa(data_sock->info.sin_addr));
     char buffer[1024];
 
-    sprintf(buffer, "(%s, %d, %d)", ip, data_sock->port / 256,
+    replace(ip, '.', ',');
+    sprintf(buffer, "(%s,%d,%d).", ip, data_sock->port / 256,
             data_sock->port % 256);
     send_message(conn->sock.fd, CODE_PASSIVE_MODE, buffer);
-    free(tok);
     free(ip);
 }
 
 int command_pasv(__attribute((unused))poll_t *poll, connection_t *conn,
-                 __attribute((unused))const char *input)
+    __attribute((unused))const char *input)
 {
     conn->data_sock = create_socket_with_free_port();
 

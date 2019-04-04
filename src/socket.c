@@ -43,7 +43,7 @@ sock_t create_socket(int port)
 
 void bind_socket(sock_t *sock)
 {
-    if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) < 0)
+    if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) == -1)
         exit_with("error on binding socket with port : '%d'", sock->port);
     listen(sock->fd, 5);
 }
@@ -66,7 +66,7 @@ sock_t create_socket_with_free_port(void)
 
     while (port < 65535) {
         sock.port = port;
-        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) >= 0)
+        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0)
             return (sock);
         ++port;
     }

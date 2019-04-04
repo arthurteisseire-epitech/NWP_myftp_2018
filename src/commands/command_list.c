@@ -7,6 +7,7 @@
 
 #include <dirent.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "code.h"
 #include "utils.h"
 #include "poll.h"
@@ -32,10 +33,16 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     char *tmp = realpath;
     char *second_arg = find_second_arg(input);
 
+    if (conn->mode == NONE)
+        return (0);
     realpath = concat(realpath, second_arg);
     free(tmp);
     free(second_arg);
-    list_dir(realpath, conn->sock.fd);
+    write(conn->data_sock.fd, "toto", 4);
+    dprintf(conn->data_sock.fd, "hello\n");
+    list_dir(realpath, conn->data_sock.fd);
+    close(conn->data_sock.fd);
+    conn->mode = NONE;
     free(realpath);
     send_message(conn->sock.fd, CODE_OK, NULL);
     return (0);
