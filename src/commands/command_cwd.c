@@ -22,15 +22,6 @@ static char *get_path(const connection_t *conn, const char *input_path)
     return (path);
 }
 
-static char *concat(const char *str1, const char *str2)
-{
-    char *res = safe_malloc(strlen(str1) + strlen(str2) + 1);
-
-    strcpy(res, str1);
-    strcat(res, str2);
-    return (res);
-}
-
 int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     DIR *dir;

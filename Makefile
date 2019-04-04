@@ -23,6 +23,8 @@ SRC		=	$(DSRC)socket.c			\
 			$(DUTILS)safe_alloc.c		\
 			$(DUTILS)exit_with.c		\
 			$(DUTILS)begin_with.c		\
+			$(DUTILS)concat.c		\
+			$(DUTILS)find_second_arg.c	\
 			$(DCOMMANDS)exec_command.c	\
 			$(DCOMMANDS)command_quit.c	\
 			$(DCOMMANDS)command_user.c	\
@@ -30,6 +32,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DCOMMANDS)command_cwd.c	\
 			$(DCOMMANDS)command_pwd.c	\
 			$(DCOMMANDS)command_cdup.c	\
+			$(DCOMMANDS)command_list.c	\
 			$(DCOMMANDS)command_noop.c	\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\

@@ -14,5 +14,7 @@
 void *safe_malloc(size_t size);
 void exit_with(const char *msg, ...);
 bool begin_with(const char *pre, const char *str);
+char *concat(const char *str1, const char *str2);
+char *find_second_arg(char *input);
 
 #endif
