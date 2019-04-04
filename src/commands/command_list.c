@@ -7,6 +7,7 @@
 
 #include <dirent.h>
 #include <stdio.h>
+#include "code.h"
 #include "utils.h"
 #include "poll.h"
 
@@ -36,5 +37,6 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     free(second_arg);
     list_dir(realpath, conn->sock.fd);
     free(realpath);
+    send_message(conn->sock.fd, CODE_OK);
     return (0);
 }
