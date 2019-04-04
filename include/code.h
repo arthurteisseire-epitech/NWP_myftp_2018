@@ -12,6 +12,7 @@
 
 enum code_e {
     CODE_CONNECTION = 220,
+    CODE_NOOP = 200,
     CODE_USER = 331,
     CODE_LOGIN_FIRST = 503,
     CODE_LOGIN_INCORRECT = 530,
@@ -36,6 +37,7 @@ static const struct code_message_s codes[] = {
     {CODE_COMMAND_NOT_FOUND, "Unknown command."},
     {CODE_FAILED_CHANGE_DIR, "Failed to change directory."},
     {CODE_SUCCESS_CHANGE_DIR, "Directory successfully changed."},
+    {CODE_NOOP, "NOOP ok."},
     {CODE_QUIT, "Goodbye."},
     {0, NULL},
 };
