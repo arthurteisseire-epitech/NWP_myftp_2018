@@ -29,7 +29,7 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
 {
     char *realpath = concat(poll->path, conn->user.path);
     char *tmp = realpath;
-    char *second_arg = find_second_arg((char *)input);
+    char *second_arg = find_second_arg(input);
 
     realpath = concat(realpath, second_arg);
     free(tmp);

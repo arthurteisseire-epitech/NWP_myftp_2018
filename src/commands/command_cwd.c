@@ -25,12 +25,10 @@ static char *get_path(const connection_t *conn, const char *input_path)
 int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     DIR *dir;
-    char *input_path = (char *)input + 3;
+    char *input_path = find_second_arg(input);
     char *real_path;
     char *path;
 
-    input_path += strspn(input_path, " ");
-    input_path = strndup(input_path, strcspn(input_path, " \r\n"));
     path = get_path(conn, input_path);
     real_path = concat(poll->path, path);
     dir = opendir(real_path);
