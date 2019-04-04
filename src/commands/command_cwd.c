@@ -44,12 +44,14 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
     real_path = concat(poll->path, path);
     dir = opendir(real_path);
     if (dir) {
+        free(conn->user.path);
         conn->user.path = path;
         send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR);
         closedir(dir);
     } else {
         send_message(conn->sock.fd, CODE_FAILED_CHANGE_DIR);
     }
+    free(real_path);
     free(input_path);
     return (0);
 }
