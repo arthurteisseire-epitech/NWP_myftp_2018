@@ -31,8 +31,7 @@ static char *concat(const char *str1, const char *str2)
     return (res);
 }
 
-int command_cwd(poll_t *poll, connection_t *conn,
-                const char *input)
+int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     DIR *dir;
     char *input_path = (char *)input + 3;
