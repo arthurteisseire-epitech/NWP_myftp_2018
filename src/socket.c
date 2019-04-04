@@ -5,6 +5,7 @@
 ** socket.c
 */
 
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -12,6 +13,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <netdb.h>
+#include <errno.h>
 #include "utils.h"
 #include "socket.h"
 
@@ -34,8 +36,9 @@ sock_t create_socket(int port)
     int optval = 1;
 
     if (fd < 0)
-        exit_with("error when creating socket");
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int));
+        exit_with("socket: %s", strerror(errno));
+    if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int)) == -1)
+        exit_with("setsockopt: %s", strerror(errno));
     sock = init_socket(fd, port);
     return sock;
 }
@@ -43,7 +46,7 @@ sock_t create_socket(int port)
 void bind_socket(sock_t *sock)
 {
     if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) == -1)
-        exit_with("error on binding socket with port : '%d'", ntohs(sock->info.sin_port));
+        exit_with("bind: %s", strerror(errno));
     listen(sock->fd, 5);
 }
 
@@ -54,7 +57,7 @@ sock_t accept_connection(int fd)
     sock.size_info = sizeof(struct sockaddr_in);
     sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
     if (sock.fd < 0)
-        exit_with("error when accepting");
+        exit_with("accept: %s", strerror(errno));
     return (sock);
 }
 
@@ -63,9 +66,9 @@ sock_t create_socket_with_free_port(struct sockaddr_in *addr)
     int port = 2000;
     sock_t sock;
 
-    sock.fd = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
+    sock.fd = socket(addr->sin_family, SOCK_STREAM, getprotobyname("TCP")->p_proto);
     if (sock.fd < 0)
-        exit_with("error when creating socket");
+        exit_with("socket: %s", strerror(errno));
     sock.info = *addr;
     sock.size_info = sizeof(sock.info);
     while (port < 65536) {
