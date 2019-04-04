@@ -26,6 +26,7 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input);
 int command_cdup(poll_t *poll, connection_t *conn, const char *input);
 int command_list(poll_t *poll, connection_t *conn, const char *input);
 int command_noop(poll_t *poll, connection_t *conn, const char *input);
+int command_help(poll_t *poll, connection_t *conn, const char *input);
 
 static const struct command_s guest_commands[] = {
     {"QUIT", command_quit},
@@ -40,6 +41,7 @@ static const struct command_s admin_commands[] = {
     {"CDUP", command_cdup},
     {"LIST", command_list},
     {"NOOP", command_noop},
+    {"HELP", command_help},
     {NULL, NULL},
 };
 
