@@ -15,7 +15,12 @@
 enum fd_type {
     SERVER,
     CLIENT,
-    FREE
+};
+
+enum mode_e {
+    PASSIVE,
+    ACTIVE,
+    NONE,
 };
 
 struct user_s {
@@ -30,6 +35,7 @@ typedef struct connection_s {
     sock_t sock;
     enum fd_type type;
     bool is_event;
+    enum mode_e mode;
     struct connection_s *next;
 } connection_t;
 

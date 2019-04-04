@@ -27,6 +27,7 @@ connection_t *create_connection(sock_t *sock, enum fd_type type)
     conn->user = init_user();
     conn->sock = *sock;
     conn->type = type;
+    conn->mode = NONE;
     conn->is_event = false;
     conn->next = NULL;
     return (conn);

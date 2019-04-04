@@ -19,21 +19,6 @@
 #include "command.h"
 #include "code.h"
 
-//static sock_t create_socket_with_free_port(void)
-//{
-//    int port = 2000;
-//    sock_t sock = create_socket(0);
-//
-//    while (port < 65535) {
-//        sock.fd = port;
-//        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) >= 0)
-//            return (sock);
-//        ++port;
-//    }
-//    exit_with("no more ports available on the system");
-//    return (sock);
-//}
-
 void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
 {
     sock_t sock;

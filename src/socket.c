@@ -58,3 +58,18 @@ sock_t accept_connection(int fd)
         exit_with("error when accepting");
     return (sock);
 }
+
+sock_t create_socket_with_free_port(void)
+{
+    int port = 2000;
+    sock_t sock = create_socket(0);
+
+    while (port < 65535) {
+        sock.port = port;
+        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) >= 0)
+            return (sock);
+        ++port;
+    }
+    exit_with("no more ports available on the system");
+    return (sock);
+}

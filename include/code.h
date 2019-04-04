@@ -22,6 +22,7 @@ enum code_e {
     CODE_QUIT = 221,
     CODE_FAILED_CHANGE_DIR = 550,
     CODE_SUCCESS_CHANGE_DIR = 250,
+    CODE_PASSIVE_MODE = 227,
 };
 
 struct code_message_s {
@@ -41,6 +42,7 @@ static const struct code_message_s codes[] = {
     {CODE_OK, "ok."},
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
+    {CODE_PASSIVE_MODE, "(IP, PORT)"},
     {0, NULL},
 };
 

@@ -25,8 +25,7 @@ void poll_reload_set(poll_t *poll, fd_set *set)
 
     FD_ZERO(set);
     while (current != NULL) {
-        if (current->type != FREE)
-            FD_SET(current->sock.fd, set);
+        FD_SET(current->sock.fd, set);
         current = current->next;
     }
 }
