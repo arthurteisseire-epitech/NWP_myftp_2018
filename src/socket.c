@@ -20,7 +20,6 @@ sock_t init_socket(int fd, int port)
     sock_t sock;
 
     sock.fd = fd;
-    sock.port = port;
     sock.size_info = sizeof(sock.info);
     sock.info.sin_family = AF_INET;
     sock.info.sin_port = htons(port);
@@ -44,7 +43,7 @@ sock_t create_socket(int port)
 void bind_socket(sock_t *sock)
 {
     if (bind(sock->fd, (struct sockaddr *) &sock->info, sock->size_info) == -1)
-        exit_with("error on binding socket with port : '%d'", sock->port);
+        exit_with("error on binding socket with port : '%d'", ntohs(sock->info.sin_port));
     listen(sock->fd, 5);
 }
 
@@ -64,8 +63,10 @@ sock_t create_socket_with_free_port(void)
     int port = 2000;
     sock_t sock = create_socket(0);
 
-    while (port < 65535) {
-        sock.port = port;
+    while (port < 65536) {
+        sock.info.sin_family = AF_INET;
+        sock.info.sin_port = htons(port);
+        sock.info.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
         if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0)
             return (sock);
         ++port;

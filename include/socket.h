@@ -14,7 +14,6 @@ typedef struct sock_s {
     struct sockaddr_in info;
     socklen_t size_info;
     int fd;
-    int port;
 } sock_t;
 
 sock_t init_socket(int fd, int port);

@@ -38,6 +38,8 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     realpath = concat(realpath, second_arg);
     free(tmp);
     free(second_arg);
+    printf("%d\n", conn->data_sock.fd);
+    printf("%d\n", conn->sock.fd);
     write(conn->data_sock.fd, "toto", 4);
     dprintf(conn->data_sock.fd, "hello\n");
     list_dir(realpath, conn->data_sock.fd);
