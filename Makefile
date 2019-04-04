@@ -5,13 +5,13 @@
 ## Makefile
 ##
 
-CC			=	gcc
-INC			=	include/
+CC		=	gcc
+INC		=	-Iinclude/ -Ilib/string_ext/include
+LIBS		=	-Llib/string_ext/ -lstring_ext
 DTESTS		=	tests/
 DSRC		=	src/
 DUTILS		=	$(DSRC)utils/
 DCOMMANDS	=	$(DSRC)commands/
-DSRC_UT		=	tests/
 
 MAIN		=	$(DSRC)main.c		\
 
@@ -40,13 +40,12 @@ SRC		=	$(DSRC)socket.c			\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 
-CFLAGS		+=	-Wall -Wextra -I$(INC)
+CFLAGS		+=	-Wall -Wextra $(INC)
 OBJ			=	$(SRC:.c=.o) $(MAIN:.c=.o)
 NAME		=	myftp
-NAME_UT		=	units
 
 all: $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LIBS)
 
 clean:
 	rm -f $(OBJ)
@@ -60,14 +59,4 @@ re: fclean all
 debug: CFLAGS += -g
 debug: re
 
-tests_run: CFLAGS += --coverage
-tests_run: LDFLAGS += -lgcov -lcriterion
-tests_run:
-	$(CC) -o $(NAME_UT) $(SRC) $(SRC_UT) $(CFLAGS) $(LDFLAGS)
-	./$(NAME_UT)
-	gcov *.gcno &> /dev/null
-
-tests_debug: CFLAGS += -g
-tests_debug: tests_run
-
-.PHONY: all clean fclean re debug tests_run tests_debug
+.PHONY: all clean fclean re debug

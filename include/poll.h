@@ -33,6 +33,7 @@ struct user_s {
 typedef struct connection_s {
     struct user_s user;
     sock_t sock;
+    sock_t data_sock;
     enum fd_type type;
     bool is_event;
     enum mode_e mode;

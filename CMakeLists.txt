@@ -3,9 +3,9 @@ project(PSU_myftp_2018 C)
 
 add_compile_options(-Wall -Wextra)
 
-include_directories(include)
+include_directories(include lib/string_ext/include)
 
 file(GLOB_RECURSE sources src/*.c)
-file(GLOB_RECURSE tests_sources tests/*.c)
-add_executable(myftp ${sources} ${tests_sources})
-target_link_libraries(myftp criterion)
+file(GLOB_RECURSE lib lib/string_ext/*.c)
+add_executable(myftp ${sources} ${lib})
+target_link_libraries(myftp)
