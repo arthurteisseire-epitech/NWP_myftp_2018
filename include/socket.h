@@ -20,6 +20,6 @@ sock_t init_socket(int fd, int port);
 sock_t create_socket(int port);
 sock_t accept_connection(int fd);
 void bind_socket(sock_t *sock);
-sock_t create_socket_with_free_port(void);
+sock_t create_socket_with_free_port(struct sockaddr_in *addr);
 
 #endif

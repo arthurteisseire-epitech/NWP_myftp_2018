@@ -58,15 +58,18 @@ sock_t accept_connection(int fd)
     return (sock);
 }
 
-sock_t create_socket_with_free_port(void)
+sock_t create_socket_with_free_port(struct sockaddr_in *addr)
 {
     int port = 2000;
-    sock_t sock = create_socket(0);
+    sock_t sock;
 
+    sock.fd = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
+    if (sock.fd < 0)
+        exit_with("error when creating socket");
+    sock.info = *addr;
+    sock.size_info = sizeof(sock.info);
     while (port < 65536) {
-        sock.info.sin_family = AF_INET;
         sock.info.sin_port = htons(port);
-        sock.info.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
         if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0)
             return (sock);
         ++port;
