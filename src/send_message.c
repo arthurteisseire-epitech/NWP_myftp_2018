@@ -10,7 +10,7 @@
 static void print_message(int fd, enum code_e code, const char *str, int i)
 {
     if (str)
-        dprintf(fd, "%d %s %s\r\n", code, str, codes[i].message);
+        dprintf(fd, "%d %s %s\r\n", code, codes[i].message, str);
     else
         dprintf(fd, "%d %s\r\n", code, codes[i].message);
 }
