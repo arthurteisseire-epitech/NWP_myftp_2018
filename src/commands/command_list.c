@@ -37,6 +37,6 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     free(second_arg);
     list_dir(realpath, conn->sock.fd);
     free(realpath);
-    send_message(conn->sock.fd, CODE_OK);
+    send_message(conn->sock.fd, CODE_OK, NULL);
     return (0);
 }

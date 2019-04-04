@@ -18,7 +18,7 @@ int command_pass(__attribute((unused))poll_t *poll,
     char *p = find_second_arg(input);
 
     if (!conn->user.name) {
-        send_message(conn->sock.fd, CODE_LOGIN_FIRST);
+        send_message(conn->sock.fd, CODE_LOGIN_FIRST, NULL);
         return (0);
     }
     if (strcmp(conn->user.name, USERNAME) == 0) {
@@ -26,12 +26,12 @@ int command_pass(__attribute((unused))poll_t *poll,
         conn->user.password = p;
         if (*p == '\0') {
             conn->user.is_logged = true;
-            send_message(conn->sock.fd, CODE_LOGIN_SUCCESS);
+            send_message(conn->sock.fd, CODE_LOGIN_SUCCESS, NULL);
         } else {
-            send_message(conn->sock.fd, CODE_LOGIN_INCORRECT);
+            send_message(conn->sock.fd, CODE_LOGIN_INCORRECT, NULL);
         }
     } else {
-        send_message(conn->sock.fd, CODE_LOGIN_INCORRECT);
+        send_message(conn->sock.fd, CODE_LOGIN_INCORRECT, NULL);
     }
     return (0);
 }

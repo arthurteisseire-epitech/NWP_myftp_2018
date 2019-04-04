@@ -5,6 +5,7 @@
 ** command_pasv.c
 */
 
+#include <arpa/inet.h>
 #include "code.h"
 #include "poll.h"
 
@@ -16,6 +17,6 @@ int command_pasv(__attribute((unused))poll_t *poll, connection_t *conn,
     data_sock.info = conn->sock.info;
     data_sock.size_info = conn->sock.size_info;
     conn->mode = PASSIVE;
-    send_message(conn->sock.fd, CODE_PASSIVE_MODE);
+    send_message(conn->sock.fd, CODE_PASSIVE_MODE, inet_ntoa(data_sock.info.sin_addr));
     return (0);
 }

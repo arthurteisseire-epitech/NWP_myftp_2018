@@ -22,6 +22,6 @@ int command_help(__attribute((unused))poll_t *poll, connection_t *conn,
         space = " ";
     }
     dprintf(conn->sock.fd, "\n");
-    send_message(conn->sock.fd, CODE_HELP_OK);
+    send_message(conn->sock.fd, CODE_HELP_OK, NULL);
     return (0);
 }

@@ -11,6 +11,6 @@
 int command_noop(__attribute((unused))poll_t *poll, connection_t *conn,
     __attribute((unused))const char *input)
 {
-    send_message(conn->sock.fd, CODE_OK);
+    send_message(conn->sock.fd, CODE_OK, NULL);
     return (0);
 }

@@ -42,18 +42,10 @@ static const struct code_message_s codes[] = {
     {CODE_OK, "ok."},
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
-    {CODE_PASSIVE_MODE, "(IP, PORT)"},
+    {CODE_PASSIVE_MODE, ""},
     {0, NULL},
 };
 
-static inline void send_message(int fd, enum code_e code)
-{
-    for (int i = 0; codes[i].message; ++i)
-        if (codes[i].code == code) {
-            dprintf(fd, "%d %s\r\n", code, codes[i].message);
-            return;
-        }
-    dprintf(fd, "%d Code not implemented\r\n", code);
-}
+void send_message(int fd, enum code_e code, const char *str);
 
 #endif

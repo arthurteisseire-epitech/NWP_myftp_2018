@@ -20,6 +20,6 @@ int command_cdup(__attribute((unused))poll_t *poll, connection_t *conn,
 {
     if (strcmp(conn->user.path, "/") != 0)
         cdup_dir(conn);
-    send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR);
+    send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR, NULL);
     return (0);
 }

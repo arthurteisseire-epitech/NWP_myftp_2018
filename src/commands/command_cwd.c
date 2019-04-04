@@ -35,10 +35,10 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
     if (dir) {
         free(conn->user.path);
         conn->user.path = path;
-        send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR);
+        send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR, NULL);
         closedir(dir);
     } else {
-        send_message(conn->sock.fd, CODE_FAILED_CHANGE_DIR);
+        send_message(conn->sock.fd, CODE_FAILED_CHANGE_DIR, NULL);
     }
     free(real_path);
     free(input_path);

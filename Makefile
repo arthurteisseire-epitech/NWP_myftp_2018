@@ -20,6 +20,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DSRC)poll.c			\
 			$(DSRC)poll_connection.c	\
 			$(DSRC)connection.c		\
+			$(DSRC)send_message.c		\
 			$(DUTILS)safe_alloc.c		\
 			$(DUTILS)exit_with.c		\
 			$(DUTILS)begin_with.c		\

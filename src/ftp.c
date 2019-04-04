@@ -26,7 +26,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
     if (conn->type == SERVER) {
         sock = accept_connection(sockfd);
         poll_add_conn(poll, create_connection(&sock, CLIENT));
-        send_message(sock.fd, CODE_CONNECTION);
+        send_message(sock.fd, CODE_CONNECTION, NULL);
     } else if (conn->type == CLIENT) {
         exec_command(poll, conn);
     }
