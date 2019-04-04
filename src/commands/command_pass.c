@@ -24,8 +24,12 @@ int command_pass(__attribute((unused))poll_t *poll,
     if (strcmp(conn->user.name, USERNAME) == 0) {
         free(conn->user.password);
         conn->user.password = p;
-        if (*p == '\0')
+        if (*p == '\0') {
+            conn->user.is_logged = true;
             send_message(conn->sock.fd, CODE_LOGIN_SUCCESS);
+        } else {
+            send_message(conn->sock.fd, CODE_LOGIN_INCORRECT);
+        }
     } else {
         send_message(conn->sock.fd, CODE_LOGIN_INCORRECT);
     }

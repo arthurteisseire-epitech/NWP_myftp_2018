@@ -22,6 +22,7 @@ struct user_s {
     char *name;
     char *password;
     char *path;
+    bool is_logged;
 };
 
 typedef struct connection_s {

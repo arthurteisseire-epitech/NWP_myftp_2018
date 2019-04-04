@@ -16,6 +16,7 @@ static struct user_s init_user(void)
     user.password = NULL;
     user.name = NULL;
     user.path = strdup("/");
+    user.is_logged = false;
     return (user);
 }
 
