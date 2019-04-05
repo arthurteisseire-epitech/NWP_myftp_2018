@@ -22,13 +22,13 @@ static void send_passive(connection_t *conn, const char *path_input)
     if (child_pid == 0) {
         sock = accept_connection(conn->data_sock.fd);
         fd = open(path_input, O_RDONLY);
-        if (fd < 0)
+        if (fd < 0) {
+            send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
+        }
         rd_bytes = read(fd, buffer, 4096);
         write(sock.fd, buffer, rd_bytes);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
-        close(conn->data_sock.fd);
-        close(sock.fd);
         exit(0);
     }
     if (child_pid > 0)

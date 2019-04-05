@@ -38,7 +38,7 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
         send_message(conn->sock.fd, CODE_SUCCESS_CHANGE_DIR, NULL);
         closedir(dir);
     } else {
-        send_message(conn->sock.fd, CODE_FAILED_CHANGE_DIR, NULL);
+        send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
     }
     free(real_path);
     free(input_path);
