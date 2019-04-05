@@ -6,13 +6,23 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include "poll.h"
 #include "utils.h"
+
+static int last_index(const char *s)
+{
+    size_t len = strlen(s);
+
+    return (len == 0 ? 0 : len - 1);
+}
 
 poll_t *poll_init(char *path)
 {
     poll_t *poll = safe_malloc(sizeof(poll_t));
 
+    if (strcmp(path, "/") != 0 && path[last_index(path)] == '/')
+        path[last_index(path)] = '\0';
     poll->path = path;
     poll->size = 0;
     poll->conn = NULL;
