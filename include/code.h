@@ -25,6 +25,7 @@ enum code_e {
     CODE_SUCCESS = 250,
     CODE_PASSIVE_MODE = 227,
     CODE_TRANSFER_COMPLETE = 226,
+    CODE_NO_MODE = 425,
 };
 
 struct code_message_s {
@@ -47,6 +48,7 @@ static const struct code_message_s codes[] = {
     {CODE_PASSIVE_MODE, "Entering Passive Mode"},
     {CODE_STATUS_OK, "File status ok about to open connection."},
     {CODE_TRANSFER_COMPLETE, "Transfer complete."},
+    {CODE_NO_MODE, "Use PORT or PASV first."},
     {0, NULL},
 };
 

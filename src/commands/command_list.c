@@ -38,8 +38,8 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
     if (conn->mode == NONE)
-        return (0);
-    if (conn->mode == PASSIVE)
+        send_message(conn->sock.fd, CODE_NO_MODE, NULL);
+    else if (conn->mode == PASSIVE)
         send_passive(conn, path);
     free(path);
     return (0);
