@@ -5,8 +5,6 @@
 ** commande_dele.c
 */
 
-#include <string.h>
-#include <stdio.h>
 #include "code.h"
 #include "utils.h"
 #include "poll.h"
