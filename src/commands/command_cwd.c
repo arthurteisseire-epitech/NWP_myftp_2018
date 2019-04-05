@@ -12,24 +12,12 @@
 #include "utils.h"
 #include "poll.h"
 
-static char *get_path(const connection_t *conn, const char *input_path)
-{
-    char *path = safe_malloc(strlen(conn->user.path) + strlen(input_path) + 2);
-
-    strcpy(path, conn->user.path);
-    strcat(path, input_path);
-    strcat(path, "/");
-    return (path);
-}
-
 int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     DIR *dir;
-    char *input_path = find_second_arg(input);
-    char *path = get_path(conn, input_path);
-    char *real_path = concat(poll->path, path);
+    char *path = get_dir_path_from_input(poll->path, conn->user.path, input);
 
-    dir = opendir(real_path);
+    dir = opendir(path);
     if (dir) {
         free(conn->user.path);
         conn->user.path = path;
@@ -38,7 +26,5 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
     } else {
         send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
     }
-    free(real_path);
-    free(input_path);
     return (0);
 }
