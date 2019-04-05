@@ -35,17 +35,12 @@ static void send_passive(connection_t *conn, char *real_path)
 
 int command_list(poll_t *poll, connection_t *conn, const char *input)
 {
-    char *real_path = concat(poll->path, conn->user.path);
-    char *tmp = real_path;
-    char *second_arg = find_second_arg(input);
+    char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
-    real_path = concat(real_path, second_arg);
-    free(tmp);
-    free(second_arg);
     if (conn->mode == NONE)
         return (0);
     if (conn->mode == PASSIVE)
-        send_passive(conn, real_path);
-    free(real_path);
+        send_passive(conn, path);
+    free(path);
     return (0);
 }
