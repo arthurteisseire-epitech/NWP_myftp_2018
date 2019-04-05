@@ -38,3 +38,10 @@ char *get_dir_path_from_input(const char *root, const char *user_path,
     free(file_path);
     return (real_path);
 }
+
+char *get_user_path(const char *path)
+{
+    char *user_path = strdup(path + strcspn(path, "/"));
+
+    return (user_path);
+}
