@@ -36,19 +36,13 @@ static void send_passive(connection_t *conn, const char *path_input)
     conn->mode = NONE;
 }
 
-int command_retr(poll_t *poll, connection_t *conn,
-    const char *input)
+int command_retr(poll_t *poll, connection_t *conn, const char *input)
 {
-    char *path_input = find_second_arg(input);
-    char *real_path = concat(poll->path, "/");
-    char *tmp = real_path;
+    char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
-    real_path = concat(real_path, path_input);
     if (conn->mode == PASSIVE)
-        send_passive(conn, real_path);
+        send_passive(conn, path);
     conn->mode = NONE;
-    free(tmp);
-    free(real_path);
-    free(path_input);
+    free(path);
     return (0);
 }
