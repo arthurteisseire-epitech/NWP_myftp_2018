@@ -30,6 +30,7 @@ int command_help(poll_t *poll, connection_t *conn, const char *input);
 int command_pasv(poll_t *poll, connection_t *conn, const char *input);
 int command_retr(poll_t *poll, connection_t *conn, const char *input);
 int command_dele(poll_t *poll, connection_t *conn, const char *input);
+int command_stor(poll_t *poll, connection_t *conn, const char *input);
 
 static const struct command_s guest_commands[] = {
     {"QUIT", command_quit},
@@ -48,6 +49,7 @@ static const struct command_s admin_commands[] = {
     {"PASV", command_pasv},
     {"RETR", command_retr},
     {"DELE", command_dele},
+    {"STOR", command_stor},
     {NULL, NULL},
 };
 

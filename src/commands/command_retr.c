@@ -11,7 +11,7 @@
 #include "poll.h"
 #include "utils.h"
 
-void write_all(sock_t *sock, int fd)
+static void write_all(sock_t *sock, int fd)
 {
     char buffer[4096];
     int rd_bytes;
@@ -48,6 +48,8 @@ int command_retr(poll_t *poll, connection_t *conn, const char *input)
 {
     char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
+    if (conn->mode == NONE)
+        send_message(conn->sock.fd, CODE_NO_MODE, NULL);
     if (conn->mode == PASSIVE)
         send_passive(conn, path);
     conn->mode = NONE;
