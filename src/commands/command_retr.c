@@ -11,10 +11,19 @@
 #include "poll.h"
 #include "utils.h"
 
-static void send_passive(connection_t *conn, const char *path_input)
+void write_all(sock_t *sock, int fd)
 {
     char buffer[4096];
     int rd_bytes;
+
+    do {
+        rd_bytes = read(fd, buffer, 4096);
+        write(sock->fd, buffer, rd_bytes);
+    } while (rd_bytes == 4096);
+}
+
+static void send_passive(connection_t *conn, const char *path_input)
+{
     sock_t sock;
     int fd;
     int child_pid = fork();
@@ -26,8 +35,7 @@ static void send_passive(connection_t *conn, const char *path_input)
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
         }
-        rd_bytes = read(fd, buffer, 4096);
-        write(sock.fd, buffer, rd_bytes);
+        write_all(&sock, fd);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
     }
