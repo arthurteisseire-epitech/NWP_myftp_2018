@@ -12,6 +12,7 @@
 
 enum code_e {
     CODE_CONNECTION = 220,
+    CODE_LIST = 150,
     CODE_OK = 200,
     CODE_HELP_OK = 214,
     CODE_USER = 331,
@@ -43,6 +44,7 @@ static const struct code_message_s codes[] = {
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
     {CODE_PASSIVE_MODE, "Entering Passive Mode"},
+    {CODE_LIST, "Here comes the directory listing."},
     {0, NULL},
 };
 

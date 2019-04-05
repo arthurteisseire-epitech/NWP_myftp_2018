@@ -17,6 +17,8 @@ static void send_passive(connection_t *conn, char *real_path)
     sock_t sock;
     int child_pid = fork();
 
+    if (child_pid > 0)
+        send_message(conn->sock.fd, CODE_LIST, NULL);
     if (child_pid == 0) {
         sock = accept_connection(conn->data_sock.fd);
         dup2(sock.fd, 1);
