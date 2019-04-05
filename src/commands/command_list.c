@@ -21,6 +21,7 @@ static void send_passive(connection_t *conn, char *real_path)
     if (child_pid == 0) {
         sock = accept_connection(conn->data_sock.fd);
         dup2(sock.fd, 1);
+        dup2(sock.fd, 2);
         close(conn->data_sock.fd);
         sprintf(buffer, "ls -l %s", real_path);
         system(buffer);
