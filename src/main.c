@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
+#include <dirent.h>
 #include "myftp.h"
 #include "utils.h"
 #include "socket.h"
@@ -25,10 +26,25 @@ long int get_port(const char *port_str)
     return port;
 }
 
+bool is_dir(const char *path)
+{
+    DIR *dir = opendir(path);
+
+    if (dir) {
+        closedir(dir);
+        return (true);
+    }
+    return (false);
+}
+
 int main(int ac, char *av[])
 {
     if (ac != 3)
         return (84);
+    if (!is_dir(av[2])) {
+        perror("open");
+        return (84);
+    }
     start_ftp(get_port(av[1]), av[2]);
     return (0);
 }
