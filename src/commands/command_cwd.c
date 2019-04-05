@@ -12,7 +12,7 @@
 #include "utils.h"
 #include "poll.h"
 
-int command_cwd(poll_t *poll, connection_t *conn, const char *input)
+void change_dir(const poll_t *poll, connection_t *conn, const char *input)
 {
     DIR *dir;
     char *path = get_dir_path_from_input(poll->path, conn->user.path, input);
@@ -21,10 +21,18 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
     if (dir) {
         free(conn->user.path);
         conn->user.path = path;
-        send_message(conn->sock.fd, CODE_SUCCESS, NULL);
+        send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
         closedir(dir);
     } else {
         send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
     }
+}
+
+int command_cwd(poll_t *poll, connection_t *conn, const char *input)
+{
+    if (strcmp(conn->user.path, "/") != 0)
+        change_dir(poll, conn, input);
+    else
+        send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
     return (0);
 }
