@@ -22,7 +22,7 @@ enum code_e {
     CODE_COMMAND_NOT_FOUND = 500,
     CODE_QUIT = 221,
     CODE_FAILED = 550,
-    CODE_SUCCESS_CHANGE_DIR = 250,
+    CODE_SUCCESS = 250,
     CODE_PASSIVE_MODE = 227,
     CODE_TRANSFER_COMPLETE = 226,
 };
@@ -40,7 +40,7 @@ static const struct code_message_s codes[] = {
     {CODE_LOGIN_SUCCESS, "Login successful."},
     {CODE_COMMAND_NOT_FOUND, "Unknown command."},
     {CODE_FAILED, "Failed"},
-    {CODE_SUCCESS_CHANGE_DIR, "Directory successfully changed."},
+    {CODE_SUCCESS, "Success"},
     {CODE_OK, "ok."},
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
