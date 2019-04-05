@@ -64,17 +64,16 @@ sock_t accept_connection(int fd)
 sock_t create_socket_with_free_port(struct sockaddr_in *addr)
 {
     int port = 2000;
-    sock_t sock;
+    sock_t sock = create_socket(port);
 
-    sock.fd = socket(addr->sin_family, SOCK_STREAM, getprotobyname("TCP")->p_proto);
-    if (sock.fd < 0)
-        exit_with("socket: %s", strerror(errno));
     sock.info = *addr;
     sock.size_info = sizeof(sock.info);
     while (port < 65536) {
         sock.info.sin_port = htons(port);
-        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0)
+        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0) {
+            listen(sock.fd, 1);
             return (sock);
+        }
         ++port;
     }
     exit_with("no more ports available on the system");

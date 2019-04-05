@@ -12,40 +12,33 @@
 #include "utils.h"
 #include "poll.h"
 
-void list_dir(const char *realpath, int fd)
+static void send_passive(connection_t *conn, char *real_path)
 {
-    DIR *d = opendir(realpath);
-    struct dirent *dir;
+    sock_t sock;
+    int child_pid = fork();
 
-    if (d) {
-        dir = readdir(d);
-        while (dir) {
-            dprintf(fd, "%s\n", dir->d_name);
-            dir = readdir(d);
-        }
-        closedir(d);
+    if (child_pid == 0) {
+        sock = accept_connection(conn->data_sock.fd);
+        dup2(sock.fd, 1);
+        execvp("ls", (char *[]){"ls", "-l", real_path, NULL});
     }
+    send_message(conn->sock.fd, CODE_OK, NULL);
+    conn->mode = NONE;
 }
 
 int command_list(poll_t *poll, connection_t *conn, const char *input)
 {
-    char *realpath = concat(poll->path, conn->user.path);
-    char *tmp = realpath;
+    char *real_path = concat(poll->path, conn->user.path);
+    char *tmp = real_path;
     char *second_arg = find_second_arg(input);
 
-    if (conn->mode == NONE)
-        return (0);
-    realpath = concat(realpath, second_arg);
+    real_path = concat(real_path, second_arg);
     free(tmp);
     free(second_arg);
-    printf("%d\n", conn->data_sock.fd);
-    printf("%d\n", conn->sock.fd);
-    write(conn->data_sock.fd, "toto", 4);
-    dprintf(conn->data_sock.fd, "hello\n");
-    list_dir(realpath, conn->data_sock.fd);
-    close(conn->data_sock.fd);
-    conn->mode = NONE;
-    free(realpath);
-    send_message(conn->sock.fd, CODE_OK, NULL);
+    if (conn->mode == NONE)
+        return (0);
+    if (conn->mode == PASSIVE)
+        send_passive(conn, real_path);
+    free(real_path);
     return (0);
 }
