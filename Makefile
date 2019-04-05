@@ -24,6 +24,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DUTILS)exit_with.c		\
 			$(DUTILS)begin_with.c		\
 			$(DUTILS)concat.c		\
+			$(DUTILS)get_path.c		\
 			$(DUTILS)find_second_arg.c	\
 			$(DCOMMANDS)exec_command.c	\
 			$(DCOMMANDS)command_quit.c	\
