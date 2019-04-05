@@ -12,7 +12,7 @@
 
 enum code_e {
     CODE_CONNECTION = 220,
-    CODE_LIST = 150,
+    CODE_STATUS_OK = 150,
     CODE_OK = 200,
     CODE_HELP_OK = 214,
     CODE_USER = 331,
@@ -24,6 +24,7 @@ enum code_e {
     CODE_FAILED_CHANGE_DIR = 550,
     CODE_SUCCESS_CHANGE_DIR = 250,
     CODE_PASSIVE_MODE = 227,
+    CODE_TRANSFER_COMPLETE = 226,
 };
 
 struct code_message_s {
@@ -44,7 +45,8 @@ static const struct code_message_s codes[] = {
     {CODE_HELP_OK, "Help ok."},
     {CODE_QUIT, "Goodbye."},
     {CODE_PASSIVE_MODE, "Entering Passive Mode"},
-    {CODE_LIST, "Here comes the directory listing."},
+    {CODE_STATUS_OK, "File status ok about to open connection."},
+    {CODE_TRANSFER_COMPLETE, "Transfer complete."},
     {0, NULL},
 };
 
