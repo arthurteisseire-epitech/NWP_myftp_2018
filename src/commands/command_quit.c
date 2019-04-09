@@ -14,5 +14,5 @@ int command_quit(poll_t *poll, connection_t *conn,
 {
     send_message(conn->sock.fd, CODE_QUIT, NULL);
     poll_remove_conn(poll, conn);
-    return (0);
+    return (COMMAND_QUIT);
 }

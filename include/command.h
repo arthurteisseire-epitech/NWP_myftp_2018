@@ -11,6 +11,7 @@
 #include "poll.h"
 
 #define COMMAND_NOT_FOUND -12
+#define COMMAND_QUIT -13
 
 struct command_s {
     const char *name;

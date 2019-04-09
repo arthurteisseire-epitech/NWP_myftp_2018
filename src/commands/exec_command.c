@@ -38,6 +38,16 @@ static int exec_admin_command(poll_t *poll, connection_t *conn,
     return (COMMAND_NOT_FOUND);
 }
 
+static int exec_any_command(poll_t *poll, connection_t *conn, const char *input)
+{
+    int status;
+
+    status = exec_guest_command(poll, conn, input);
+    if (status == COMMAND_NOT_FOUND)
+        status = exec_admin_command(poll, conn, input);
+    return (status);
+}
+
 void exec_command(poll_t *poll, connection_t *conn)
 {
     char input[64] = {0};
@@ -49,9 +59,15 @@ void exec_command(poll_t *poll, connection_t *conn)
     p += strspn(input, "\n\r");
     if (p[0] == '\0')
         return;
-    status = exec_guest_command(poll, conn, input);
-    if (status == COMMAND_NOT_FOUND && is_admin(&conn->user))
-        status = exec_admin_command(poll, conn, input);
+    if (!is_admin(&conn->user)) {
+        status = exec_guest_command(poll, conn, input);
+        if (status == COMMAND_NOT_FOUND) {
+            send_message(conn->sock.fd, CODE_LOGIN_INCORRECT, NULL);
+            status = 0;
+        }
+    } else {
+        status = exec_any_command(poll, conn, input);
+    }
     if (status == COMMAND_NOT_FOUND)
-        send_message(conn->sock.fd, CODE_LOGIN_INCORRECT, NULL);
+        send_message(conn->sock.fd, CODE_COMMAND_NOT_FOUND, NULL);
 }
