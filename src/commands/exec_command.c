@@ -46,7 +46,7 @@ void exec_command(poll_t *poll, connection_t *conn)
     int status;
 
     input[rd_bytes] = '\0';
-    p += strspn(input, " \n\r");
+    p += strspn(input, "\n\r");
     if (p[0] == '\0')
         return;
     status = exec_guest_command(poll, conn, input);
