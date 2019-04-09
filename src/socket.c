@@ -70,7 +70,8 @@ sock_t create_socket_with_free_port(struct sockaddr_in *addr)
     sock.size_info = sizeof(sock.info);
     while (port < 65536) {
         sock.info.sin_port = htons(port);
-        if (bind(sock.fd, (struct sockaddr *) &sock.info, sock.size_info) == 0) {
+        if (bind(sock.fd, (struct sockaddr *) &sock.info,
+            sock.size_info) == 0) {
             listen(sock.fd, 1);
             return (sock);
         }

@@ -40,8 +40,8 @@ static const struct command_s guest_commands[] = {
 };
 
 static const struct command_s admin_commands[] = {
-    {"PWD", command_pwd},
-    {"CWD", command_cwd},
+    {"PWD",  command_pwd},
+    {"CWD",  command_cwd},
     {"CDUP", command_cdup},
     {"LIST", command_list},
     {"NOOP", command_noop},
