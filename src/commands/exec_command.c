@@ -53,5 +53,5 @@ void exec_command(poll_t *poll, connection_t *conn)
     if (status == COMMAND_NOT_FOUND && is_admin(&conn->user))
         status = exec_admin_command(poll, conn, input);
     if (status == COMMAND_NOT_FOUND)
-        send_message(conn->sock.fd, CODE_COMMAND_NOT_FOUND, NULL);
+        send_message(conn->sock.fd, CODE_LOGIN_INCORRECT, NULL);
 }
