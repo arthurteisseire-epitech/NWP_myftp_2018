@@ -12,14 +12,6 @@
 #include "myftp.h"
 #include "command.h"
 
-static bool is_admin(struct user_s *user)
-{
-    return (user->name != NULL &&
-    user->password != NULL &&
-    strcmp(user->name, USERNAME) == 0
-    && strcmp(user->password, PASSWORD) == 0);
-}
-
 static int exec_guest_command(poll_t *poll, connection_t *conn,
     const char *input)
 {

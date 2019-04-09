@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include "command.h"
 
 void *safe_malloc(size_t size);
 void exit_with(const char *msg, ...);
@@ -21,5 +22,6 @@ char *get_file_path_from_input(const char *root, const char *user_path,
 char *get_dir_path_from_input(const char *root, const char *user_path,
     const char *input);
 char *get_user_path(const char *path);
+bool is_admin(const struct user_s *user);
 
 #endif
