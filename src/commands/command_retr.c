@@ -18,6 +18,7 @@ static void write_all(sock_t *sock, int fd)
 
     do {
         rd_bytes = read(fd, buffer, 4096);
+        buffer[rd_bytes] = '\0';
         write(sock->fd, buffer, rd_bytes);
     } while (rd_bytes == 4096);
 }
