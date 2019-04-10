@@ -30,7 +30,7 @@ static void send_passive(connection_t *conn, const char *path_input)
     int child_pid = fork();
 
     if (child_pid == 0) {
-        sock = accept_connection(conn->data_sock.fd);
+        accept_connection(&conn->data_sock);
         fd = open(path_input, O_RDONLY);
         if (fd < 0) {
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");

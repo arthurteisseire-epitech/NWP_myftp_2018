@@ -38,14 +38,13 @@ static void send_active(connection_t *conn, char *real_path)
 
 static void send_passive(connection_t *conn, char *real_path)
 {
-    sock_t sock;
     int child_pid = fork();
     char buffer[1024];
 
     if (child_pid == 0) {
-        sock = accept_connection(conn->data_sock.fd);
-        dup2(sock.fd, 1);
-        dup2(sock.fd, 2);
+        accept_connection(&conn->data_sock);
+        dup2(conn->data_sock.fd, 1);
+        dup2(conn->data_sock.fd, 2);
         sprintf(buffer, "ls -l %s", real_path);
         system(buffer);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);

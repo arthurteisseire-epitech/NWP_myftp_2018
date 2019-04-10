@@ -23,8 +23,9 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
 {
     sock_t sock;
 
+    sock.fd = sockfd;
     if (conn->type == SERVER) {
-        sock = accept_connection(sockfd);
+        accept_connection(&sock);
         poll_add_conn(poll, create_connection(&sock, CLIENT));
         send_message(sock.fd, CODE_CONNECTION, NULL);
     } else if (conn->type == CLIENT) {

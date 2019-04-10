@@ -50,15 +50,12 @@ void bind_socket(sock_t *sock)
     listen(sock->fd, 5);
 }
 
-sock_t accept_connection(int fd)
+void accept_connection(sock_t *sock)
 {
-    sock_t sock;
-
-    sock.size_info = sizeof(struct sockaddr_in);
-    sock.fd = accept(fd, (struct sockaddr *) &sock.info, &sock.size_info);
-    if (sock.fd < 0)
+    sock->size_info = sizeof(struct sockaddr_in);
+    sock->fd = accept(sock->fd, (struct sockaddr *) &sock->info, &sock->size_info);
+    if (sock->fd < 0)
         exit_with("accept: %s", strerror(errno));
-    return (sock);
 }
 
 sock_t create_socket_with_free_port(struct sockaddr_in *addr)
