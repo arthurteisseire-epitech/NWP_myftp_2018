@@ -22,6 +22,6 @@ void connect_socket(sock_t *sock)
 {
     if (connect(sock->fd, (struct sockaddr *) &sock->info,
         sock->size_info) == -1) {
-        exit_with("accept: %s", strerror(errno));
+        exit_with("connect: %s", strerror(errno));
     }
 }
