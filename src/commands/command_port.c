@@ -67,7 +67,7 @@ int command_port(__attribute((unused))poll_t *poll, connection_t *conn,
         return (-1);
     }
     fill_socket(&conn->data_sock, port_str);
-    send_message(conn->sock.fd, CODE_SUCCESS,
+    send_message(conn->sock.fd, CODE_OK,
         "PORT command successful. Consider using PASV.");
     conn->mode = ACTIVE;
     free(ip_str);
