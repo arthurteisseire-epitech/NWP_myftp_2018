@@ -7,6 +7,7 @@
 
 #include <arpa/inet.h>
 #include <string.h>
+#include <netdb.h>
 #include "utils.h"
 #include "code.h"
 #include "poll.h"
@@ -51,13 +52,17 @@ int command_port(__attribute((unused))poll_t *poll, connection_t *conn,
     char *port_str = split_arg(ip_str);
 
     if (port_str == NULL ||
-        !inet_aton(ip_str, (struct in_addr *) &conn->data_sock.info)) {
+        !inet_aton(ip_str, &conn->data_sock.info.sin_addr)) {
         send_message(conn->sock.fd, CODE_COMMAND_NOT_FOUND,
             "Invalid port command.");
         return (-1);
     }
     conn->data_sock.size_info = sizeof(conn->data_sock.info);
     conn->data_sock.info.sin_port = get_port(port_str);
+    conn->data_sock.info.sin_family = AF_INET;
+    conn->data_sock.size_info = sizeof(conn->data_sock.info);
+    conn->data_sock.fd = socket(AF_INET, SOCK_STREAM,
+        getprotobyname("TCP")->p_proto);
     send_message(conn->sock.fd, CODE_SUCCESS,
         "PORT command successful. Consider using PASV.");
     conn->mode = ACTIVE;
