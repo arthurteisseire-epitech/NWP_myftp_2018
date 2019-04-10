@@ -26,7 +26,6 @@ static void write_all(sock_t *sock, int fd)
 static void send_passive(connection_t *conn, const char *path_input,
     void (*f)(sock_t *))
 {
-    sock_t sock;
     int fd;
     int child_pid = fork();
 
@@ -37,7 +36,7 @@ static void send_passive(connection_t *conn, const char *path_input,
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
         }
-        write_all(&sock, fd);
+        write_all(&conn->data_sock, fd);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
     }
