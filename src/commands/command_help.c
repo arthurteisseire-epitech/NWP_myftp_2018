@@ -5,8 +5,8 @@
 ** command_help.c
 */
 
-#include <command.h>
 #include <stdio.h>
+#include "command.h"
 #include "code.h"
 #include "poll.h"
 
