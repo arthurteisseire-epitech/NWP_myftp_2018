@@ -10,14 +10,14 @@
 #include "code.h"
 #include "poll.h"
 
-void replace(char *str, char old, char new)
+static void replace(char *str, char old, char new)
 {
     for (int i = 0; str[i]; ++i)
         if (str[i] == old)
             str[i] = new;
 }
 
-void send_ok_message(const connection_t *conn, sock_t *data_sock)
+static void send_ok_message(const connection_t *conn, sock_t *data_sock)
 {
     char *ip = strdup(inet_ntoa(data_sock->info.sin_addr));
     char buffer[1024];

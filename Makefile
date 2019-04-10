@@ -41,6 +41,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DCOMMANDS)command_retr.c	\
 			$(DCOMMANDS)command_dele.c	\
 			$(DCOMMANDS)command_stor.c	\
+			$(DCOMMANDS)command_port.c	\
 
 SRC_UT		=	$(DSRC_UT)poll_test.c		\
 

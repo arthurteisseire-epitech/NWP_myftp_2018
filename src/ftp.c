@@ -53,5 +53,4 @@ void start_ftp(int port, char *path)
     poll_add_conn(poll, create_connection(&sock, SERVER));
     while (1)
         handle_connections(poll, &sock);
-    close(sock.fd);
 }
