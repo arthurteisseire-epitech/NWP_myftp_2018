@@ -14,38 +14,16 @@
 #include "utils.h"
 #include "poll.h"
 
-static void send_active(connection_t *conn, char *real_path)
+static void send_mode(connection_t *conn, char *path, void (*f)(sock_t *))
 {
     int child_pid = fork();
     char buffer[1024];
 
     if (child_pid == 0) {
-        if (connect(conn->data_sock.fd, (struct sockaddr *) &conn->data_sock.info,
-            conn->data_sock.size_info) == -1) {
-            perror("connect");
-            return;
-        }
+        f(&conn->data_sock);
         dup2(conn->data_sock.fd, 1);
         dup2(conn->data_sock.fd, 2);
-        sprintf(buffer, "ls -l %s", real_path);
-        system(buffer);
-        send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
-        exit(0);
-    }
-    if (child_pid > 0)
-        send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
-}
-
-static void send_passive(connection_t *conn, char *real_path)
-{
-    int child_pid = fork();
-    char buffer[1024];
-
-    if (child_pid == 0) {
-        accept_connection(&conn->data_sock);
-        dup2(conn->data_sock.fd, 1);
-        dup2(conn->data_sock.fd, 2);
-        sprintf(buffer, "ls -l %s", real_path);
+        sprintf(buffer, "ls -l %s", path);
         system(buffer);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
@@ -59,9 +37,9 @@ int command_list(poll_t *poll, connection_t *conn, const char *input)
     char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
     if (conn->mode == PASSIVE)
-        send_passive(conn, path);
+        send_mode(conn, path, accept_connection);
     else if (conn->mode == ACTIVE)
-        send_active(conn, path);
+        send_mode(conn, path, connect_socket);
     else
         send_message(conn->sock.fd, CODE_NO_MODE, NULL);
     conn->mode = NONE;

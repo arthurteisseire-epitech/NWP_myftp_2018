@@ -15,6 +15,7 @@ DCOMMANDS	=	$(DSRC)commands/
 MAIN		=	$(DSRC)main.c		\
 
 SRC		=	$(DSRC)socket.c			\
+			$(DSRC)connect.c		\
 			$(DSRC)ftp.c			\
 			$(DSRC)poll.c			\
 			$(DSRC)poll_connection.c	\
