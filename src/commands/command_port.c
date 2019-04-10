@@ -45,19 +45,8 @@ static in_port_t get_port(char *str)
     return (htons(left * 256 + right));
 }
 
-static void fill_socket(sock_t *data_sock, char *port_str)
+static int fill_socket(connection_t *conn, char *ip_str)
 {
-    data_sock->size_info = sizeof(data_sock->info);
-    data_sock->info.sin_port = get_port(port_str);
-    data_sock->info.sin_family = AF_INET;
-    data_sock->fd = socket(AF_INET, SOCK_STREAM,
-        getprotobyname("TCP")->p_proto);
-}
-
-int command_port(__attribute((unused))poll_t *poll, connection_t *conn,
-    const char *input)
-{
-    char *ip_str = find_second_arg(input);
     char *port_str = split_arg(ip_str);
 
     if (port_str == NULL ||
@@ -66,7 +55,21 @@ int command_port(__attribute((unused))poll_t *poll, connection_t *conn,
             "Invalid port command.");
         return (-1);
     }
-    fill_socket(&conn->data_sock, port_str);
+    conn->data_sock.size_info = sizeof(conn->data_sock.info);
+    conn->data_sock.info.sin_port = get_port(port_str);
+    conn->data_sock.info.sin_family = AF_INET;
+    conn->data_sock.fd = socket(AF_INET, SOCK_STREAM,
+        getprotobyname("TCP")->p_proto);
+    return (0);
+}
+
+int command_port(__attribute((unused))poll_t *poll, connection_t *conn,
+    const char *input)
+{
+    char *ip_str = find_second_arg(input);
+
+    if (fill_socket(conn, ip_str) == -1)
+        return (-1);
     send_message(conn->sock.fd, CODE_OK,
         "PORT command successful. Consider using PASV.");
     conn->mode = ACTIVE;
