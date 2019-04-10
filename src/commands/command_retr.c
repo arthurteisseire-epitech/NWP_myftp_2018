@@ -23,15 +23,16 @@ static void write_all(sock_t *sock, int fd)
     } while (rd_bytes == 4096);
 }
 
-static void send_passive(connection_t *conn, const char *path_input)
+static void send_passive(connection_t *conn, const char *path,
+    void (*f)(sock_t *))
 {
     sock_t sock;
     int fd;
     int child_pid = fork();
 
     if (child_pid == 0) {
-        accept_connection(&conn->data_sock);
-        fd = open(path_input, O_RDONLY);
+        f(&conn->data_sock);
+        fd = open(path, O_RDONLY);
         if (fd < 0) {
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
@@ -49,10 +50,12 @@ int command_retr(poll_t *poll, connection_t *conn, const char *input)
 {
     char *path = get_file_path_from_input(poll->path, conn->user.path, input);
 
-    if (conn->mode == NONE)
-        send_message(conn->sock.fd, CODE_NO_MODE, NULL);
     if (conn->mode == PASSIVE)
-        send_passive(conn, path);
+        send_passive(conn, path, accept_connection);
+    else if (conn->mode == ACTIVE)
+        send_passive(conn, path, connect_socket);
+    else
+        send_message(conn->sock.fd, CODE_NO_MODE, NULL);
     conn->mode = NONE;
     free(path);
     return (0);
