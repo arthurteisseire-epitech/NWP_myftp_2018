@@ -13,7 +13,7 @@
 #include "command.h"
 
 static int exec_guest_command(poll_t *poll, connection_t *conn,
-                              const char *input)
+    const char *input)
 {
     for (int i = 0; guest_commands[i].name; ++i)
         if (begin_with(guest_commands[i].name, input))
@@ -22,7 +22,7 @@ static int exec_guest_command(poll_t *poll, connection_t *conn,
 }
 
 static int exec_admin_command(poll_t *poll, connection_t *conn,
-                              const char *input)
+    const char *input)
 {
     for (int i = 0; admin_commands[i].name; ++i)
         if (begin_with(admin_commands[i].name, input))

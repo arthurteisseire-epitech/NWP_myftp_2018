@@ -10,7 +10,7 @@
 
 char *find_second_arg(const char *input)
 {
-    char *p = (char *) input;
+    char *p = (char *)input;
 
     p += strcspn(p, " \r\n");
     p += strspn(p, " \r\n");
