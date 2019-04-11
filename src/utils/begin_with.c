@@ -15,4 +15,3 @@ bool begin_with(const char *pre, const char *str)
 
     return (len_str < len_pre ? false : strncasecmp(pre, str, len_pre) == 0);
 }
-

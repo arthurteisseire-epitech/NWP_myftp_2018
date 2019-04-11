@@ -16,4 +16,3 @@ char *concat(const char *str1, const char *str2)
     strcat(res, str2);
     return (res);
 }
-

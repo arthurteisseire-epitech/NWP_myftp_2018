@@ -24,4 +24,3 @@ void send_message(int fd, enum code_e code, const char *str)
         }
     dprintf(fd, "%d Code not implemented\r\n", code);
 }
-

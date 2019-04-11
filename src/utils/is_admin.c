@@ -18,4 +18,3 @@ bool is_admin(const struct user_s *user)
         strcmp(user->name, USERNAME) == 0 &&
         strcmp(user->password, PASSWORD) == 0);
 }
-
