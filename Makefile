@@ -26,6 +26,7 @@ SRC		=	$(DSRC)socket.c			\
 			$(DUTILS)begin_with.c		\
 			$(DUTILS)concat.c		\
 			$(DUTILS)get_path.c		\
+			$(DUTILS)is_dir.c		\
 			$(DUTILS)find_second_arg.c	\
 			$(DUTILS)is_admin.c		\
 			$(DCOMMANDS)exec_command.c	\
