@@ -13,7 +13,7 @@
 #include "command.h"
 
 static int exec_guest_command(poll_t *poll, connection_t *conn,
-    const char *input)
+                              const char *input)
 {
     for (int i = 0; guest_commands[i].name; ++i)
         if (begin_with(guest_commands[i].name, input))
@@ -22,7 +22,7 @@ static int exec_guest_command(poll_t *poll, connection_t *conn,
 }
 
 static int exec_admin_command(poll_t *poll, connection_t *conn,
-    const char *input)
+                              const char *input)
 {
     for (int i = 0; admin_commands[i].name; ++i)
         if (begin_with(admin_commands[i].name, input))
@@ -40,17 +40,10 @@ static int exec_any_command(poll_t *poll, connection_t *conn, const char *input)
     return (status);
 }
 
-void exec_command(poll_t *poll, connection_t *conn)
+void exec_command(poll_t *poll, connection_t *conn, const char *input)
 {
-    char input[64] = {0};
-    char *p = input;
-    int rd_bytes = read(conn->sock.fd, input, sizeof(input));
     int status;
 
-    input[rd_bytes] = '\0';
-    p += strspn(input, "\n\r");
-    if (p[0] == '\0')
-        return;
     if (!is_admin(&conn->user)) {
         status = exec_guest_command(poll, conn, input);
         if (status == COMMAND_NOT_FOUND) {
@@ -62,4 +55,15 @@ void exec_command(poll_t *poll, connection_t *conn)
     }
     if (status == COMMAND_NOT_FOUND)
         send_message(conn->sock.fd, CODE_COMMAND_NOT_FOUND, NULL);
+}
+
+void exec_all_commands(poll_t *poll, connection_t *conn)
+{
+    char *input = NULL;
+    size_t rd_bytes = 0;
+    FILE *socket = fdopen(conn->sock.fd, "r");
+
+    while (getline(&input, &rd_bytes, socket) > 0)
+        if (strcmp(input, "\r\n") != 0)
+            exec_command(poll, conn, input);
 }

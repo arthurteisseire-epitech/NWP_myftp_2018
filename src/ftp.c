@@ -29,7 +29,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
         poll_add_conn(poll, create_connection(&sock, CLIENT));
         send_message(sock.fd, CODE_CONNECTION, NULL);
     } else if (conn->type == CLIENT) {
-        exec_command(poll, conn);
+        exec_all_commands(poll, conn);
     }
 }
 
