@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "poll.h"
 #include "utils.h"
 
@@ -23,10 +24,10 @@ poll_t *poll_init(char *path)
 
     if (strcmp(path, "/") != 0 && path[last_index(path)] == '/')
         path[last_index(path)] = '\0';
-    poll->path = path;
+    poll->path = my_realpath(path);
     poll->size = 0;
     poll->conn = NULL;
-    return poll;
+    return (poll);
 }
 
 void poll_reload_set(poll_t *poll, fd_set *set)

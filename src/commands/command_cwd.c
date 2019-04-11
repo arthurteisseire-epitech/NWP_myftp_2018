@@ -13,37 +13,19 @@
 #include "utils.h"
 #include "poll.h"
 
-void change_dir(const poll_t *poll, connection_t *conn, const char *input,
-    const char *second_arg)
-{
-    DIR *dir;
-    char *path;
-
-    if (second_arg[0] == '/')
-        path = get_dir_path_from_input(poll->path, "", input);
-    else
-        path = get_dir_path_from_input(poll->path, conn->user.path, input);
-    dir = opendir(path);
-    if (dir) {
-        free(conn->user.path);
-        if (strcmp(second_arg, ".") != 0)
-            conn->user.path = get_user_path(path);
-        send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
-        closedir(dir);
-    } else {
-        send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
-    }
-    free(path);
-}
-
 int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     char *second_arg = find_second_arg(input);
+    char *path = my_realpath(concat(conn->user.path, second_arg));
 
-    if (strcmp(second_arg, "..") == 0)
-        command_cdup(poll, conn, input);
-    else
-        change_dir(poll, conn, input, second_arg);
+    if (path != NULL && strlen(path) >= strlen(poll->path)) {
+        free(conn->user.path);
+        conn->user.path = path;
+        send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
+    } else {
+        send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
+    }
     free(second_arg);
+    free(path);
     return (0);
 }

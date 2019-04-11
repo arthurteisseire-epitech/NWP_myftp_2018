@@ -24,5 +24,6 @@ char *get_dir_path_from_input(const char *root, const char *user_path,
 char *get_user_path(const char *path);
 bool is_admin(const struct user_s *user);
 bool is_dir(const char *path);
+char *my_realpath(const char *path);
 
 #endif

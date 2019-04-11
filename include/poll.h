@@ -54,7 +54,8 @@ void poll_set_conns(poll_t *poll, fd_set *set);
 void poll_remove_conn(poll_t *poll, connection_t *conn);
 connection_t *poll_connection(poll_t *poll);
 
-connection_t *create_connection(sock_t *sock, enum fd_type type);
+connection_t *
+create_connection(sock_t *sock, enum fd_type type, const char *path);
 void delete_connection(connection_t *conn);
 
 #endif
