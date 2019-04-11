@@ -40,8 +40,8 @@ static void send_mode(connection_t *conn, const char *path,
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
     }
-    if (child_pid > 0)
-        send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
+    send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
+    close(conn->data_sock.fd);
 }
 
 int command_retr(poll_t *poll, connection_t *conn, const char *input)
