@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <netdb.h>
-#include <libnet.h>
 #include "code.h"
 #include "utils.h"
 #include "poll.h"
