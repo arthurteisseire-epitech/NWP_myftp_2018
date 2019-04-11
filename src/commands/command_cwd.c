@@ -26,7 +26,8 @@ void change_dir(const poll_t *poll, connection_t *conn, const char *input,
     dir = opendir(path);
     if (dir) {
         free(conn->user.path);
-        conn->user.path = get_user_path(path);
+        if (strcmp(second_arg, ".") != 0)
+            conn->user.path = get_user_path(path);
         send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
         closedir(dir);
     } else {
