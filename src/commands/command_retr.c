@@ -32,7 +32,7 @@ static void send_mode(connection_t *conn, const char *path,
     if (child_pid == 0) {
         f(&conn->data_sock);
         fd = open(path, O_RDONLY);
-        if (fd < 0) {
+        if (fd < 0 || is_dir(path)) {
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
         }
