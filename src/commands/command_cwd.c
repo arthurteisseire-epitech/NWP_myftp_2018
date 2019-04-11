@@ -16,7 +16,8 @@
 int command_cwd(poll_t *poll, connection_t *conn, const char *input)
 {
     char *second_arg = find_second_arg(input);
-    char *path = my_realpath(concat(conn->user.path, second_arg));
+    char *tmp = concat(conn->user.path, second_arg);
+    char *path = my_realpath(tmp);
 
     if (path != NULL && strlen(path) >= strlen(poll->path)) {
         free(conn->user.path);
@@ -24,8 +25,9 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
         send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
     } else {
         send_message(conn->sock.fd, CODE_FAILED, "to change directory.");
+        free(path);
     }
+    free(tmp);
     free(second_arg);
-    free(path);
     return (0);
 }
