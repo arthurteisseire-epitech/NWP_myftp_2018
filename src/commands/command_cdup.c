@@ -18,7 +18,7 @@ static void cdup_dir(connection_t *conn)
 int command_cdup(__attribute((unused))poll_t *poll, connection_t *conn,
     __attribute((unused))const char *input)
 {
-    if (strcmp(conn->user.path, "/") != 0)
+    if (strlen(conn->user.path) > strlen(poll->path))
         cdup_dir(conn);
     send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
     return (0);

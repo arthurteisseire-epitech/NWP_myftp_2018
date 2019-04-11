@@ -44,9 +44,10 @@ static void send_mode(connection_t *conn, const char *path,
     close(conn->data_sock.fd);
 }
 
-int command_retr(poll_t *poll, connection_t *conn, const char *input)
+int command_retr(__attribute((unused))poll_t *poll, connection_t *conn,
+    const char *input)
 {
-    char *path = get_file_path_from_input(poll->path, conn->user.path, input);
+    char *path = get_file_path_from_input(conn->user.path, input);
 
     if (conn->mode == PASSIVE)
         send_mode(conn, path, accept_connection);

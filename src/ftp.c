@@ -26,7 +26,7 @@ void handle_connection(poll_t *poll, connection_t *conn, int sockfd)
     sock.fd = sockfd;
     if (conn->type == SERVER) {
         accept_connection(&sock);
-        poll_add_conn(poll, create_connection(&sock, CLIENT));
+        poll_add_conn(poll, create_connection(&sock, CLIENT, poll->path));
         send_message(sock.fd, CODE_CONNECTION, NULL);
     } else if (conn->type == CLIENT) {
         exec_all_commands(poll, conn);
@@ -51,7 +51,7 @@ void start_ftp(int port, char *path)
     sock_t sock = create_socket(port);
 
     bind_socket(&sock);
-    poll_add_conn(poll, create_connection(&sock, SERVER));
+    poll_add_conn(poll, create_connection(&sock, SERVER, poll->path));
     while (1)
         handle_connections(poll, &sock);
 }
