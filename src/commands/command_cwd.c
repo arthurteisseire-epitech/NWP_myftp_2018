@@ -19,7 +19,8 @@ int command_cwd(poll_t *poll, connection_t *conn, const char *input)
     char *tmp = concat(conn->user.path, second_arg);
     char *path = my_realpath(tmp);
 
-    if (path != NULL && strlen(path) >= strlen(poll->path) && is_dir(path)) {
+    if (path != NULL && strlen(path) >= strlen(poll->path) && is_dir(path) &&
+        strcmp(second_arg, "") != 0) {
         free(conn->user.path);
         conn->user.path = path;
         send_message(conn->sock.fd, CODE_SUCCESS, "to change directory.");
