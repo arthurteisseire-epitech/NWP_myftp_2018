@@ -36,11 +36,11 @@ static void send_mode(connection_t *conn, const char *path,
             send_message(conn->sock.fd, CODE_FAILED, "to open file.");
             exit(84);
         }
+        send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
         write_all(&conn->data_sock, fd);
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
     }
-    send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
     close(conn->data_sock.fd);
 }
 
