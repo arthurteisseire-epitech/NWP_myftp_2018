@@ -20,6 +20,7 @@ static void send_mode(connection_t *conn, char *path, void (*f)(sock_t *))
 
     if (child_pid == 0) {
         f(&conn->data_sock);
+        send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
         dup2(conn->data_sock.fd, 1);
         dup2(conn->data_sock.fd, 2);
         sprintf(buffer, "ls -l %s", path);
@@ -27,7 +28,6 @@ static void send_mode(connection_t *conn, char *path, void (*f)(sock_t *))
         send_message(conn->sock.fd, CODE_TRANSFER_COMPLETE, NULL);
         exit(0);
     }
-    send_message(conn->sock.fd, CODE_STATUS_OK, NULL);
     close(conn->data_sock.fd);
 }
 
